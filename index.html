@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PRIME</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="booking-modal.css">
+</head>
+
+<body>
+
+<header class="hd">
+  <a href="#home">
+    <img src="https://static.wixstatic.com/media/3323d5_215bb3c0d0a4429b87c15a1325314844~mv2.png/v1/crop/x_179,y_109,w_293,h_165/fill/w_410,h_231,al_c,lg_1,q_85,enc_avif,quality_auto/Prime-removebg-preview.png" alt="PRIME">
+  </a>
+
+  <nav class="nav" id="nav">
+    <a href="#home">Home</a>
+    <a href="#courts">Courts</a>
+    <a href="#community">Community</a>
+    <a href="#blog">Blog</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <a href="signin.html" class="si">Sign In</a>
+  <button class="burger" id="bg" aria-label="Menu">☰</button>
+</header>
+
+<section id="home" class="hero">
+  <div class="wrap">
+    <div>
+      <p class="lbl">Sports platform</p>
+      <h1>Connect, train<br>and play,<br>with <span>Prime.</span></h1>
+      <p class="d">Find courts, meet certified coaches, and organize matches with a sports community all in one place.</p>
+
+      <div class="stats">
+        <div><span class="num">+30</span><small>Courts Available</small></div>
+        <div><span class="num">+50</span><small>Certified Coaches</small></div>
+        <div><span class="num">+500</span><small>Active Users</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="prof">
+  <div class="wrap">
+    <p class="lbl">Your profile</p>
+    <h2>Your progress, always in view.</h2>
+    <p class="sub">A personal dashboard with your favorite sports, stats, and upcoming matches, ready as soon as you log in.</p>
+
+    <div class="pg">
+      <div class="pc">
+        <div class="who">
+          <div class="av">JR</div>
+          <div><b>Julia Reyes</b><small>Panama City · Intermediate level</small></div>
+        </div>
+
+        <div class="tags">
+          <span>Soccer 5-a-side</span>
+          <span>Padel</span>
+          <span>Running</span>
+        </div>
+
+        <div class="mini">
+          <div><b>42</b>MATCHES</div>
+          <div><b>19</b>WORKOUTS</div>
+          <div><b>7</b>ACHIEVEMENTS</div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <p class="lbl" style="font-size:9px;margin-bottom:6px">Upcoming matches</p>
+
+        <div class="up">
+          <div class="dt">18<small>JUL</small></div>
+          <div><b>Soccer 5 — Los Halcones</b>Estadio Agustín "Muquita" Sánchez · 7:00 PM</div>
+        </div>
+
+        <div class="up">
+          <div class="dt">21<small>JUL</small></div>
+          <div><b>Coaching session — Padel</b>Complejo Deportivo de La Feria de La Chorrera · 6:30 AM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="courts" class="courts">
+  <div class="wrap">
+    <div class="ch">
+      <div>
+        <p class="lbl">Sports courts</p>
+        <h2>Book your court in<br>under a minute.</h2>
+      </div>
+
+      <!-- Enlace al mapa interactivo -->
+      <a href="map.html" class="map">View Interactive Map</a>
+    </div>
+
+    <div class="flt" id="flt">
+      <button class="on2" data-s="all">All Sports</button>
+    </div>
+
+    <div class="g3">
+      <article class="cc">
+        <div class="im" style="background-image:url('pool.jpg')"></div>
+        <div class="in">
+          <h3>La Chorrera Municipal Pool</h3>
+          <small>La Chorrera, Panama West</small>
+          <div class="bt"><strong>$25 <small>/ hour</small></strong><span>↗</span></div>
+          <button class="btn go" data-court="pool">Book Court</button>
+        </div>
+      </article>
+
+      <article class="cc">
+        <div class="im" style="background-image:url('volley.jpg')"></div>
+        <div class="in">
+          <h3>La Chorrera Volley Court</h3>
+          <small>La Chorrera, Panama West</small>
+          <div class="bt"><strong>$40 <small>/ hour</small></strong><span>↗</span></div>
+          <button class="btn go" data-court="volley">Book Court</button>
+        </div>
+      </article>
+
+      <article class="cc">
+        <div class="im" style="background-image:url('turf.jpg')"></div>
+        <div class="in">
+          <h3>La Chorrera Turf Pitch</h3>
+          <small>La Chorrera, Panama West</small>
+          <div class="bt"><strong>$28 <small>/ hour</small></strong><span>↗</span></div>
+          <button class="btn go" data-court="turf">Book Court</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="signin" class="sign">
+  <div class="wrap">
+    <hr>
+    <div class="sh">
+      <p class="lbl">Account</p>
+      <a href="#courts" class="back">↑ Back to Courts</a>
+    </div>
+
+    <h2>Sign in</h2>
+
+    <div class="two">
+      <form onsubmit="return false">
+        <label class="fl">EMAIL</label>
+        <input type="email" placeholder="youremail@example.com">
+
+        <label class="fl">PASSWORD</label>
+        <input type="password" placeholder="At least 8 characters">
+
+        <div class="row">
+          <label><input type="checkbox" style="width:auto;vertical-align:middle"> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <button class="btn">Sign in</button>
+
+        <div class="or">or continue with</div>
+        <div class="soc"><button>Google</button><button>Apple</button></div>
+
+        <p class="note">Don't have an account? <a href="#">Create one</a></p>
+      </form>
+
+      <div class="faq">
+        <div class="q open">
+          <button>How do I create an account?<b></b></button>
+          <p>Click "Create one" on the left, fill in your name, email and password, then hit "Create account". You're ready to join the community.</p>
+        </div>
+
+        <div class="q">
+          <button>Is my data secure?<b></b></button>
+          <p>Yes. Your information is encrypted and never shared without your consent.</p>
+        </div>
+
+        <div class="q">
+          <button>Can I sign in with Google or Apple?<b></b></button>
+          <p>Yes, use the Google or Apple buttons below the form.</p>
+        </div>
+
+        <div class="q">
+          <button>What if I forget my password?<b></b></button>
+          <p>Click "Forgot password?" and we'll email you a reset link.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="light">
+  <div class="wrap">
+    <div class="fg">
+      <div>
+        <div class="lg">PRIME<i>.</i></div>
+        <p>Connect, train, and play. The platform that unites the sports community.</p>
+        <div class="so"><span>IG</span><span>FB</span><span>TT</span></div>
+      </div>
+
+      <div><h4>NAVIGATION</h4><ul><li>Home</li><li>Courts</li><li>Coaches</li></ul></div>
+      <div><h4>COMMUNITY</h4><ul><li>Groups</li><li>Blog</li></ul></div>
+      <div><h4>LEGAL</h4><ul><li>Terms and conditions</li></ul></div>
+    </div>
+
+    <div class="cp">© 2026 Prime. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- ===== COMMUNITY (con botón Read more y tarjetas de grupos) ===== -->
+<section id="community" class="cm">
+  <div class="wrap">
+    <div class="cmh">
+      <div>
+        <p class="lbl">Community</p>
+        <h2>Find your<br>next <span class="on">team.</span></h2>
+        <p class="cmsub">Create groups, organize matches, and share your progress with people who train like you.</p>
+      </div>
+      <a href="community.html" class="cm-btn" id="readMore" role="button">Read more <span>⟶</span></a>
+    </div>
+
+    <div class="cmg">
+      <div class="gc">
+        <div class="gh">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <div><b>Los Halcones FC</b><small>14 members · Soccer 5</small></div>
+        </div>
+        <p>Looking for 2 players for Saturday's match in Costa del Este. Intermediate level.</p>
+        <div class="gf"><span>♥ 32</span><span>💬 8 comments</span><span>↗ Share</span></div>
+      </div>
+
+      <div class="gc">
+        <div class="gh">
+          <div class="dots"><i></i><i></i></div>
+          <div><b>Padel at Dawn</b><small>9 members · Padel</small></div>
+        </div>
+        <p>Recurring group every Tuesday 6:00 AM in Albrook. Recommended for beginner level.</p>
+        <div class="gf"><span>♥ 21</span><span>💬 5 comments</span><span>↗ Share</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="imp">
+  <div class="wrap">
+    <p class="lbl">Prime impact</p>
+    <h2>The scoreboard<br>speaks for us.</h2>
+
+    <div class="bar">
+      <div><span class="num">+100</span><small>MATCHES PER WEEK</small></div>
+      <div><span class="num">+500</span><small>ACTIVE USERS</small></div>
+      <div><span class="num">+50</span><small>COACHES</small></div>
+      <div><span class="num">+30</span><small>COURTS</small></div>
+    </div>
+
+    <div class="g3">
+      <div class="tc">
+        <p>"Thanks to Prime I found a team to play with every week. It completely changed my routine."</p>
+        <div class="who"><div class="av">MG</div><div><b>Mariana Gómez</b><small>Soccer 5 player</small></div></div>
+      </div>
+
+      <div class="tc">
+        <p>"Booking courts now takes less than a minute. I no longer waste time calling anyone."</p>
+        <div class="who"><div class="av">LT</div><div><b>Luis Torres</b><small>Match organizer</small></div></div>
+      </div>
+
+      <div class="tc">
+        <p>"I found a certified coach near my home. My level improved within weeks."</p>
+        <div class="who"><div class="av">AV</div><div><b>Andrea Vega</b><small>Padel player</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="blog" class="blog">
+  <div class="wrap">
+    <p class="lbl c">Blog</p>
+    <h2>HEALTH, TRAINING AND COMMUNITY.</h2>
+
+    <article class="bc">
+      <div class="im" style="background-image:url('blog.jpg');background-size:cover;background-position:center"></div>
+      <div class="in">
+        <span class="k">TRAINING</span>
+        <h3>4 routines to boost your endurance</h3>
+        <small>Jul 28, 2026 · By Coach Ricardo</small>
+        <a href="routines.html">→</a>
+      </div>
+    </article>
+
+    <a href="routines.html" class="rm">Read More</a>
+  </div>
+</section>
+
+<section id="contact" class="ct">
+  <div class="wrap two">
+    <div>
+      <p class="lbl">Contact</p>
+      <h2>Let's talk?</h2>
+
+      <form onsubmit="return false">
+        <label class="fl">NAME</label>
+        <input placeholder="Your full name">
+
+        <label class="fl">EMAIL</label>
+        <input type="email" placeholder="you@example.com">
+
+        <label class="fl">MESSAGE</label>
+        <textarea placeholder="Tell us how we can help"></textarea>
+
+        <button class="btn" style="margin-top:16px">Send message</button>
+
+        <div class="chips">
+          <a href="mailto:hello@prime.app">✉ hello@prime.app</a>
+          <a href="tel:+50760000000">☎ +507 6000-0000</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="faq" style="padding-top:70px">
+      <div class="q open">
+        <button>How do I book a court?<b></b></button>
+        <p>Explore the court map, filter by sport and schedule, and confirm your booking in seconds.</p>
+      </div>
+
+      <div class="q">
+        <button>Can I cancel a booking?<b></b></button>
+        <p>Yes, you can cancel from your profile before the match starts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div>
+        <div class="lg">PRIME<i>.</i></div>
+        <p>Connect, train, and play. The platform that unites the sports community.</p>
+        <div class="so"><span>IG</span><span>FB</span><span>TT</span></div>
+      </div>
+
+      <div><h4>NAVIGATION</h4><ul><li>Home</li><li>Courts</li><li>Coaches</li></ul></div>
+      <div><h4>COMMUNITY</h4><ul><li>Groups</li><li>Blog</li></ul></div>
+      <div><h4>LEGAL</h4><ul><li>Terms and conditions</li></ul></div>
+    </div>
+
+    <div class="cp">© 2026 Prime. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('bg').onclick = () =>
+  document.getElementById('nav').classList.toggle('show');
+
+document.querySelectorAll('#nav a').forEach(a =>
+  a.onclick = () => document.getElementById('nav').classList.remove('show')
+);
+
+document.querySelectorAll('.q button').forEach(b =>
+  b.onclick = () => b.parentElement.classList.toggle('open')
+);
+
+document.querySelectorAll('#flt button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#flt button').forEach(x => x.classList.remove('on2'));
+  b.classList.add('on2');
+
+  document.querySelectorAll('.cc').forEach(c =>
+    c.style.display = (b.dataset.s === 'all' || c.dataset.s === b.dataset.s) ? '' : 'none'
+  );
+});
+</script>
+
+<script>
+/* Read more -> community.html (respaldo por si algo bloquea el enlace) */
+document.getElementById('readMore').addEventListener('click', function(e){
+  e.preventDefault();
+  window.location.href = 'community.html';
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Sistema de reservas -->
+<script src="booking.js"></script>
+
+<!-- Aviso "You're in PRIME" después de iniciar sesión (no cambia el botón Sign In) -->
+<script>
+(() => {
+  try {
+    if (!sessionStorage.getItem("prime_welcome")) return;
+    sessionStorage.removeItem("prime_welcome");
+
+    // Nombre (si existe) tomado de la sesión guardada por Supabase
+    let name = "";
+    for (const store of [localStorage, sessionStorage]) {
+      for (let i = 0; i < store.length; i++) {
+        const k = store.key(i);
+        if (k && k.startsWith("sb-") && k.endsWith("-auth-token")) {
+          const u = JSON.parse(store.getItem(k) || "{}").user;
+          name = (u && u.user_metadata && (u.user_metadata.full_name || u.user_metadata.name)) || "";
+        }
+      }
+    }
+    name = name.replace(/[<>&"]/g, "");
+
+    const t = document.createElement("div");
+    t.className = "prime-toast";
+    t.setAttribute("role", "status");
+    t.innerHTML = "🎉 You're in <b>PRIME</b>" + (name ? ", " + name : "") + "!";
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 400); }, 4000);
+  } catch (e) {}
+})();
+</script>
+
+</body>
+</html>
