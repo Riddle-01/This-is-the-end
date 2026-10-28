@@ -10,11 +10,301 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="booking-modal.css">
+
+  <style>
+    /* ===== POPUP DE RESERVAS PRIME ===== */
+    .booking-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(17,19,24,.52);
+      backdrop-filter: blur(5px);
+      overflow-y: auto;
+    }
+
+    .booking-overlay.is-open {
+      display: flex;
+    }
+
+    .booking-modal {
+      position: relative;
+      width: min(552px, 100%);
+      max-height: 95vh;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.28);
+      color: #171719;
+      font-family: Inter, Arial, sans-serif;
+      animation: primeBookingPop .2s ease-out;
+    }
+
+    @keyframes primeBookingPop {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .booking-close {
+      position: absolute;
+      z-index: 2;
+      top: 17px;
+      right: 17px;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.96);
+      color: #171719;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .booking-photo {
+      height: 185px;
+      background-position: center;
+      background-size: cover;
+      background-color: #dce8eb;
+    }
+
+    .booking-content {
+      padding: 22px 28px 27px;
+    }
+
+    .booking-content h2 {
+      margin: 0 0 8px;
+      font-size: 25px;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .booking-location {
+      margin: 0 0 20px;
+      color: #727b86;
+      font-size: 14px;
+    }
+
+    .booking-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 25px;
+      padding: 16px 19px;
+      border: 1px solid #e1e5e9;
+      border-radius: 15px;
+      background: #f0f2f4;
+    }
+
+    .booking-info small {
+      display: block;
+      margin-bottom: 5px;
+      color: #727b86;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .05em;
+    }
+
+    .booking-info strong {
+      display: block;
+      font-size: 27px;
+      font-weight: 800;
+    }
+
+    .booking-sport {
+      text-align: right;
+    }
+
+    .booking-sport strong {
+      font-size: 16px;
+    }
+
+    .booking-label {
+      margin-bottom: 12px;
+      color: #737c86;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .booking-date-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .booking-date-tabs button {
+      min-height: 38px;
+      padding: 0 15px;
+      border: 1px solid #e0e4e8;
+      border-radius: 12px;
+      background: #f0f2f4;
+      color: #171719;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .booking-date-tabs button.active {
+      color: #fff;
+      border-color: #ff4a12;
+      background: #ff4a12;
+    }
+
+    .booking-calendar {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 0 16px;
+      padding: 10px;
+      border: 1px solid #e0e4e8;
+      border-radius: 10px;
+      background: #fff;
+      font: inherit;
+    }
+
+    .booking-slots {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .booking-slot {
+      min-height: 44px;
+      padding: 8px 3px;
+      border: 1px solid #e0e4e8;
+      border-radius: 12px;
+      background: #f0f2f4;
+      color: #171719;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .booking-slot:hover:not(:disabled) {
+      border-color: #ff4a12;
+    }
+
+    .booking-slot.selected {
+      color: #fff;
+      background: #ff4a12;
+      border-color: #ff4a12;
+    }
+
+    .booking-slot:disabled {
+      color: #a8a8a8;
+      background: #f7f8f9;
+      border-color: #f7f8f9;
+      text-decoration: line-through;
+      cursor: not-allowed;
+    }
+
+    .booking-selected {
+      min-height: 18px;
+      margin: 15px 0 10px;
+      color: #69727c;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .booking-continue {
+      width: 100%;
+      min-height: 55px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(100deg,#ff4a12,#ff7100);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .booking-continue:disabled {
+      background: #e8ebee;
+      color: #a0a4a8;
+      cursor: not-allowed;
+    }
+
+    .booking-cancel-note,
+    .booking-message {
+      text-align: center;
+      font-size: 12px;
+      margin: 11px 0 0;
+    }
+
+    .booking-cancel-note {
+      color: #737c86;
+    }
+
+    .booking-message {
+      color: #137547;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    body.booking-no-scroll {
+      overflow: hidden;
+    }
+
+    @media (max-width: 520px) {
+      .booking-overlay {
+        padding: 10px;
+      }
+
+      .booking-modal {
+        border-radius: 18px;
+        max-height: 95vh;
+      }
+
+      .booking-photo {
+        height: 150px;
+      }
+
+      .booking-content {
+        padding: 19px 16px 21px;
+      }
+
+      .booking-content h2 {
+        font-size: 21px;
+      }
+
+      .booking-info {
+        padding: 13px;
+      }
+
+      .booking-info strong {
+        font-size: 22px;
+      }
+
+      .booking-sport strong {
+        font-size: 13px;
+      }
+
+      .booking-slots {
+        gap: 7px;
+      }
+
+      .booking-slot {
+        font-size: 12px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
+<!-- ===== HEADER ===== -->
 <header class="hd">
   <a href="#home">
     <img src="https://static.wixstatic.com/media/3323d5_215bb3c0d0a4429b87c15a1325314844~mv2.png/v1/crop/x_179,y_109,w_293,h_165/fill/w_410,h_231,al_c,lg_1,q_85,enc_avif,quality_auto/Prime-removebg-preview.png" alt="PRIME">
@@ -32,12 +322,18 @@
   <button class="burger" id="bg" aria-label="Menu">☰</button>
 </header>
 
+<!-- ===== HOME ===== -->
 <section id="home" class="hero">
   <div class="wrap">
     <div>
       <p class="lbl">Sports platform</p>
+
       <h1>Connect, train<br>and play,<br>with <span>Prime.</span></h1>
-      <p class="d">Find courts, meet certified coaches, and organize matches with a sports community all in one place.</p>
+
+      <p class="d">
+        Find courts, meet certified coaches, and organize matches
+        with a sports community all in one place.
+      </p>
 
       <div class="stats">
         <div><span class="num">+30</span><small>Courts Available</small></div>
@@ -48,17 +344,25 @@
   </div>
 </section>
 
+<!-- ===== PROFILE ===== -->
 <section class="prof">
   <div class="wrap">
     <p class="lbl">Your profile</p>
     <h2>Your progress, always in view.</h2>
-    <p class="sub">A personal dashboard with your favorite sports, stats, and upcoming matches, ready as soon as you log in.</p>
+
+    <p class="sub">
+      A personal dashboard with your favorite sports, stats, and
+      upcoming matches, ready as soon as you log in.
+    </p>
 
     <div class="pg">
       <div class="pc">
         <div class="who">
           <div class="av">JR</div>
-          <div><b>Julia Reyes</b><small>Panama City · Intermediate level</small></div>
+          <div>
+            <b>Julia Reyes</b>
+            <small>Panama City · Intermediate level</small>
+          </div>
         </div>
 
         <div class="tags">
@@ -75,22 +379,31 @@
       </div>
 
       <div class="pc">
-        <p class="lbl" style="font-size:9px;margin-bottom:6px">Upcoming matches</p>
+        <p class="lbl" style="font-size:9px;margin-bottom:6px">
+          Upcoming matches
+        </p>
 
         <div class="up">
           <div class="dt">18<small>JUL</small></div>
-          <div><b>Soccer 5 — Los Halcones</b>Estadio Agustín "Muquita" Sánchez · 7:00 PM</div>
+          <div>
+            <b>Soccer 5 — Los Halcones</b>
+            Estadio Agustín "Muquita" Sánchez · 7:00 PM
+          </div>
         </div>
 
         <div class="up">
           <div class="dt">21<small>JUL</small></div>
-          <div><b>Coaching session — Padel</b>Complejo Deportivo de La Feria de La Chorrera · 6:30 AM</div>
+          <div>
+            <b>Coaching session — Padel</b>
+            Complejo Deportivo de La Feria de La Chorrera · 6:30 AM
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===== COURTS ===== -->
 <section id="courts" class="courts">
   <div class="wrap">
     <div class="ch">
@@ -99,7 +412,6 @@
         <h2>Book your court in<br>under a minute.</h2>
       </div>
 
-      <!-- Enlace al mapa interactivo -->
       <a href="map.html" class="map">View Interactive Map</a>
     </div>
 
@@ -110,40 +422,66 @@
     <div class="g3">
       <article class="cc">
         <div class="im" style="background-image:url('pool.jpg')"></div>
+
         <div class="in">
           <h3>La Chorrera Municipal Pool</h3>
           <small>La Chorrera, Panama West</small>
-          <div class="bt"><strong>$25 <small>/ hour</small></strong><span>↗</span></div>
-          <button class="btn go" data-court="pool">Book Court</button>
+
+          <div class="bt">
+            <strong>$25 <small>/ hour</small></strong>
+            <span>↗</span>
+          </div>
+
+          <button class="btn go" data-court="pool" type="button">
+            Book Court
+          </button>
         </div>
       </article>
 
       <article class="cc">
         <div class="im" style="background-image:url('volley.jpg')"></div>
+
         <div class="in">
           <h3>La Chorrera Volley Court</h3>
           <small>La Chorrera, Panama West</small>
-          <div class="bt"><strong>$40 <small>/ hour</small></strong><span>↗</span></div>
-          <button class="btn go" data-court="volley">Book Court</button>
+
+          <div class="bt">
+            <strong>$40 <small>/ hour</small></strong>
+            <span>↗</span>
+          </div>
+
+          <button class="btn go" data-court="volley" type="button">
+            Book Court
+          </button>
         </div>
       </article>
 
       <article class="cc">
         <div class="im" style="background-image:url('turf.jpg')"></div>
+
         <div class="in">
           <h3>La Chorrera Turf Pitch</h3>
           <small>La Chorrera, Panama West</small>
-          <div class="bt"><strong>$28 <small>/ hour</small></strong><span>↗</span></div>
-          <button class="btn go" data-court="turf">Book Court</button>
+
+          <div class="bt">
+            <strong>$28 <small>/ hour</small></strong>
+            <span>↗</span>
+          </div>
+
+          <button class="btn go" data-court="turf" type="button">
+            Book Court
+          </button>
         </div>
       </article>
     </div>
   </div>
 </section>
 
+<!-- ===== SIGN IN ===== -->
 <section id="signin" class="sign">
   <div class="wrap">
     <hr>
+
     <div class="sh">
       <p class="lbl">Account</p>
       <a href="#courts" class="back">↑ Back to Courts</a>
@@ -160,95 +498,169 @@
         <input type="password" placeholder="At least 8 characters">
 
         <div class="row">
-          <label><input type="checkbox" style="width:auto;vertical-align:middle"> Remember me</label>
+          <label>
+            <input type="checkbox" style="width:auto;vertical-align:middle">
+            Remember me
+          </label>
+
           <a href="#">Forgot password?</a>
         </div>
 
-        <button class="btn">Sign in</button>
+        <button class="btn" type="button">Sign in</button>
 
         <div class="or">or continue with</div>
-        <div class="soc"><button>Google</button><button>Apple</button></div>
 
-        <p class="note">Don't have an account? <a href="#">Create one</a></p>
+        <div class="soc">
+          <button type="button">Google</button>
+          <button type="button">Apple</button>
+        </div>
+
+        <p class="note">
+          Don't have an account? <a href="#">Create one</a>
+        </p>
       </form>
 
       <div class="faq">
         <div class="q open">
-          <button>How do I create an account?<b></b></button>
-          <p>Click "Create one" on the left, fill in your name, email and password, then hit "Create account". You're ready to join the community.</p>
+          <button type="button">
+            How do I create an account?<b></b>
+          </button>
+          <p>
+            Click "Create one" on the left, fill in your name, email
+            and password, then hit "Create account". You're ready to
+            join the community.
+          </p>
         </div>
 
         <div class="q">
-          <button>Is my data secure?<b></b></button>
-          <p>Yes. Your information is encrypted and never shared without your consent.</p>
+          <button type="button">Is my data secure?<b></b></button>
+          <p>
+            Yes. Your information is encrypted and never shared
+            without your consent.
+          </p>
         </div>
 
         <div class="q">
-          <button>Can I sign in with Google or Apple?<b></b></button>
-          <p>Yes, use the Google or Apple buttons below the form.</p>
+          <button type="button">
+            Can I sign in with Google or Apple?<b></b>
+          </button>
+          <p>
+            Yes, use the Google or Apple buttons below the form.
+          </p>
         </div>
 
         <div class="q">
-          <button>What if I forget my password?<b></b></button>
-          <p>Click "Forgot password?" and we'll email you a reset link.</p>
+          <button type="button">
+            What if I forget my password?<b></b>
+          </button>
+          <p>
+            Click "Forgot password?" and we'll email you a reset link.
+          </p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===== FOOTER CLARO ===== -->
 <footer class="light">
   <div class="wrap">
     <div class="fg">
       <div>
         <div class="lg">PRIME<i>.</i></div>
-        <p>Connect, train, and play. The platform that unites the sports community.</p>
+        <p>
+          Connect, train, and play. The platform that unites
+          the sports community.
+        </p>
         <div class="so"><span>IG</span><span>FB</span><span>TT</span></div>
       </div>
 
-      <div><h4>NAVIGATION</h4><ul><li>Home</li><li>Courts</li><li>Coaches</li></ul></div>
-      <div><h4>COMMUNITY</h4><ul><li>Groups</li><li>Blog</li></ul></div>
-      <div><h4>LEGAL</h4><ul><li>Terms and conditions</li></ul></div>
+      <div>
+        <h4>NAVIGATION</h4>
+        <ul><li>Home</li><li>Courts</li><li>Coaches</li></ul>
+      </div>
+
+      <div>
+        <h4>COMMUNITY</h4>
+        <ul><li>Groups</li><li>Blog</li></ul>
+      </div>
+
+      <div>
+        <h4>LEGAL</h4>
+        <ul><li>Terms and conditions</li></ul>
+      </div>
     </div>
 
     <div class="cp">© 2026 Prime. All rights reserved.</div>
   </div>
 </footer>
 
-<!-- ===== COMMUNITY (con botón Read more y tarjetas de grupos) ===== -->
+<!-- ===== COMMUNITY ===== -->
 <section id="community" class="cm">
   <div class="wrap">
     <div class="cmh">
       <div>
         <p class="lbl">Community</p>
         <h2>Find your<br>next <span class="on">team.</span></h2>
-        <p class="cmsub">Create groups, organize matches, and share your progress with people who train like you.</p>
+
+        <p class="cmsub">
+          Create groups, organize matches, and share your progress
+          with people who train like you.
+        </p>
       </div>
-      <a href="community.html" class="cm-btn" id="readMore" role="button">Read more <span>⟶</span></a>
+
+      <a href="community.html" class="cm-btn" id="readMore" role="button">
+        Read more <span>⟶</span>
+      </a>
     </div>
 
     <div class="cmg">
       <div class="gc">
         <div class="gh">
           <div class="dots"><i></i><i></i><i></i></div>
-          <div><b>Los Halcones FC</b><small>14 members · Soccer 5</small></div>
+          <div>
+            <b>Los Halcones FC</b>
+            <small>14 members · Soccer 5</small>
+          </div>
         </div>
-        <p>Looking for 2 players for Saturday's match in Costa del Este. Intermediate level.</p>
-        <div class="gf"><span>♥ 32</span><span>💬 8 comments</span><span>↗ Share</span></div>
+
+        <p>
+          Looking for 2 players for Saturday's match in Costa del Este.
+          Intermediate level.
+        </p>
+
+        <div class="gf">
+          <span>♥ 32</span>
+          <span>💬 8 comments</span>
+          <span>↗ Share</span>
+        </div>
       </div>
 
       <div class="gc">
         <div class="gh">
           <div class="dots"><i></i><i></i></div>
-          <div><b>Padel at Dawn</b><small>9 members · Padel</small></div>
+          <div>
+            <b>Padel at Dawn</b>
+            <small>9 members · Padel</small>
+          </div>
         </div>
-        <p>Recurring group every Tuesday 6:00 AM in Albrook. Recommended for beginner level.</p>
-        <div class="gf"><span>♥ 21</span><span>💬 5 comments</span><span>↗ Share</span></div>
+
+        <p>
+          Recurring group every Tuesday 6:00 AM in Albrook.
+          Recommended for beginner level.
+        </p>
+
+        <div class="gf">
+          <span>♥ 21</span>
+          <span>💬 5 comments</span>
+          <span>↗ Share</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===== IMPACTO PRIME ===== -->
 <section class="imp">
   <div class="wrap">
     <p class="lbl">Prime impact</p>
@@ -263,30 +675,52 @@
 
     <div class="g3">
       <div class="tc">
-        <p>"Thanks to Prime I found a team to play with every week. It completely changed my routine."</p>
-        <div class="who"><div class="av">MG</div><div><b>Mariana Gómez</b><small>Soccer 5 player</small></div></div>
+        <p>
+          "Thanks to Prime I found a team to play with every week.
+          It completely changed my routine."
+        </p>
+        <div class="who">
+          <div class="av">MG</div>
+          <div><b>Mariana Gómez</b><small>Soccer 5 player</small></div>
+        </div>
       </div>
 
       <div class="tc">
-        <p>"Booking courts now takes less than a minute. I no longer waste time calling anyone."</p>
-        <div class="who"><div class="av">LT</div><div><b>Luis Torres</b><small>Match organizer</small></div></div>
+        <p>
+          "Booking courts now takes less than a minute.
+          I no longer waste time calling anyone."
+        </p>
+        <div class="who">
+          <div class="av">LT</div>
+          <div><b>Luis Torres</b><small>Match organizer</small></div>
+        </div>
       </div>
 
       <div class="tc">
-        <p>"I found a certified coach near my home. My level improved within weeks."</p>
-        <div class="who"><div class="av">AV</div><div><b>Andrea Vega</b><small>Padel player</small></div></div>
+        <p>
+          "I found a certified coach near my home.
+          My level improved within weeks."
+        </p>
+        <div class="who">
+          <div class="av">AV</div>
+          <div><b>Andrea Vega</b><small>Padel player</small></div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===== BLOG ===== -->
 <section id="blog" class="blog">
   <div class="wrap">
     <p class="lbl c">Blog</p>
     <h2>HEALTH, TRAINING AND COMMUNITY.</h2>
 
     <article class="bc">
-      <div class="im" style="background-image:url('blog.jpg');background-size:cover;background-position:center"></div>
+      <div class="im"
+           style="background-image:url('blog.jpg');background-size:cover;background-position:center">
+      </div>
+
       <div class="in">
         <span class="k">TRAINING</span>
         <h3>4 routines to boost your endurance</h3>
@@ -299,6 +733,7 @@
   </div>
 </section>
 
+<!-- ===== CONTACT ===== -->
 <section id="contact" class="ct">
   <div class="wrap two">
     <div>
@@ -315,7 +750,9 @@
         <label class="fl">MESSAGE</label>
         <textarea placeholder="Tell us how we can help"></textarea>
 
-        <button class="btn" style="margin-top:16px">Send message</button>
+        <button class="btn" type="button" style="margin-top:16px">
+          Send message
+        </button>
 
         <div class="chips">
           <a href="mailto:hello@prime.app">✉ hello@prime.app</a>
@@ -326,98 +763,505 @@
 
     <div class="faq" style="padding-top:70px">
       <div class="q open">
-        <button>How do I book a court?<b></b></button>
-        <p>Explore the court map, filter by sport and schedule, and confirm your booking in seconds.</p>
+        <button type="button">How do I book a court?<b></b></button>
+        <p>
+          Explore the court map, filter by sport and schedule,
+          and confirm your booking in seconds.
+        </p>
       </div>
 
       <div class="q">
-        <button>Can I cancel a booking?<b></b></button>
-        <p>Yes, you can cancel from your profile before the match starts.</p>
+        <button type="button">Can I cancel a booking?<b></b></button>
+        <p>
+          Yes, you can cancel from your profile before the match starts.
+        </p>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===== FOOTER FINAL ===== -->
 <footer>
   <div class="wrap">
     <div class="fg">
       <div>
         <div class="lg">PRIME<i>.</i></div>
-        <p>Connect, train, and play. The platform that unites the sports community.</p>
+        <p>
+          Connect, train, and play. The platform that unites
+          the sports community.
+        </p>
         <div class="so"><span>IG</span><span>FB</span><span>TT</span></div>
       </div>
 
-      <div><h4>NAVIGATION</h4><ul><li>Home</li><li>Courts</li><li>Coaches</li></ul></div>
-      <div><h4>COMMUNITY</h4><ul><li>Groups</li><li>Blog</li></ul></div>
-      <div><h4>LEGAL</h4><ul><li>Terms and conditions</li></ul></div>
+      <div>
+        <h4>NAVIGATION</h4>
+        <ul><li>Home</li><li>Courts</li><li>Coaches</li></ul>
+      </div>
+
+      <div>
+        <h4>COMMUNITY</h4>
+        <ul><li>Groups</li><li>Blog</li></ul>
+      </div>
+
+      <div>
+        <h4>LEGAL</h4>
+        <ul><li>Terms and conditions</li></ul>
+      </div>
     </div>
 
     <div class="cp">© 2026 Prime. All rights reserved.</div>
   </div>
 </footer>
 
+<!-- ==========================================
+     POPUP DE RESERVAS
+========================================== -->
+<div class="booking-overlay" id="bookingOverlay" aria-hidden="true">
+  <section class="booking-modal"
+           role="dialog"
+           aria-modal="true"
+           aria-labelledby="bookingTitle">
+
+    <button class="booking-close"
+            id="bookingClose"
+            type="button"
+            aria-label="Close booking window">&times;</button>
+
+    <div class="booking-photo" id="bookingPhoto"></div>
+
+    <div class="booking-content">
+      <h2 id="bookingTitle">La Chorrera Municipal Pool</h2>
+
+      <p class="booking-location">
+        La Chorrera, Panama West ·
+        <span id="bookingRating">★ 4.6</span>
+      </p>
+
+      <div class="booking-info">
+        <div>
+          <small>PRICE PER HOUR</small>
+          <strong id="bookingPrice">$25</strong>
+        </div>
+
+        <div class="booking-sport">
+          <small>SPORT</small>
+          <strong id="bookingSport">SWIMMING POOL</strong>
+        </div>
+      </div>
+
+      <div class="booking-label">AVAILABILITY</div>
+
+      <div class="booking-date-tabs" id="bookingDateTabs">
+        <button type="button" class="active" data-day="0">Today</button>
+        <button type="button" data-day="1">Tomorrow</button>
+        <button type="button" data-day="2">In 2 days</button>
+      </div>
+
+      <input type="date"
+             class="booking-calendar"
+             id="bookingCustomDate"
+             aria-label="Choose date">
+
+      <div class="booking-slots"
+           id="bookingSlots"
+           aria-label="Available time slots"></div>
+
+      <p class="booking-selected" id="bookingSelected">
+        Select a time slot
+      </p>
+
+      <button class="booking-continue"
+              id="bookingContinue"
+              type="button"
+              disabled>
+        Choose a time slot
+      </button>
+
+      <p class="booking-cancel-note">
+        Free cancellation up to 2 hours before
+      </p>
+
+      <p class="booking-message"
+         id="bookingMessage"
+         aria-live="polite"></p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== JAVASCRIPT DEL POPUP ===== -->
 <script>
-document.getElementById('bg').onclick = () =>
-  document.getElementById('nav').classList.toggle('show');
+(() => {
+  "use strict";
 
-document.querySelectorAll('#nav a').forEach(a =>
-  a.onclick = () => document.getElementById('nav').classList.remove('show')
-);
+  const overlay = document.getElementById("bookingOverlay");
+  const closeBtn = document.getElementById("bookingClose");
+  const title = document.getElementById("bookingTitle");
+  const price = document.getElementById("bookingPrice");
+  const sport = document.getElementById("bookingSport");
+  const photo = document.getElementById("bookingPhoto");
+  const rating = document.getElementById("bookingRating");
+  const tabs = document.getElementById("bookingDateTabs");
+  const dateInput = document.getElementById("bookingCustomDate");
+  const slots = document.getElementById("bookingSlots");
+  const selectedText = document.getElementById("bookingSelected");
+  const continueBtn = document.getElementById("bookingContinue");
+  const message = document.getElementById("bookingMessage");
 
-document.querySelectorAll('.q button').forEach(b =>
-  b.onclick = () => b.parentElement.classList.toggle('open')
-);
+  if (!overlay || !closeBtn || !tabs || !slots || !continueBtn) {
+    return;
+  }
 
-document.querySelectorAll('#flt button').forEach(b => b.onclick = () => {
-  document.querySelectorAll('#flt button').forEach(x => x.classList.remove('on2'));
-  b.classList.add('on2');
+  const courts = {
+    pool: {
+      name: "La Chorrera Municipal Pool",
+      price: 25,
+      sport: "SWIMMING POOL",
+      rating: "★ 4.6",
+      image: "pool.jpg"
+    },
 
-  document.querySelectorAll('.cc').forEach(c =>
-    c.style.display = (b.dataset.s === 'all' || c.dataset.s === b.dataset.s) ? '' : 'none'
-  );
-});
+    volley: {
+      name: "La Chorrera Volley Court",
+      price: 40,
+      sport: "VOLLEYBALL",
+      rating: "★ 4.7",
+      image: "volley.jpg"
+    },
+
+    turf: {
+      name: "La Chorrera Turf Pitch",
+      price: 28,
+      sport: "SOCCER / TURF",
+      rating: "★ 4.8",
+      image: "turf.jpg"
+    }
+  };
+
+  const times = [
+    "9:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "1:00 PM",
+    "2:00 PM",
+    "3:00 PM",
+    "4:00 PM",
+    "5:00 PM"
+  ];
+
+  // Horarios de demostración; no son reservas reales.
+  const unavailable = {
+    0: ["10:00 AM", "1:00 PM", "4:00 PM"],
+    1: ["9:00 AM", "2:00 PM"],
+    2: ["11:00 AM", "3:00 PM"]
+  };
+
+  let currentCourt = "pool";
+  let chosenTime = "";
+  let chosenDay = 0;
+  let chosenDate = localISODate(0);
+
+  function localISODate(offset = 0) {
+    const date = new Date();
+    date.setDate(date.getDate() + offset);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  function openBooking(key) {
+    currentCourt = courts[key] ? key : "pool";
+
+    const court = courts[currentCourt];
+
+    chosenTime = "";
+    chosenDay = 0;
+    chosenDate = localISODate(0);
+
+    title.textContent = court.name;
+    price.textContent = `$${court.price}`;
+    sport.textContent = court.sport;
+    rating.textContent = court.rating;
+
+    photo.style.backgroundImage = `url("${court.image}")`;
+
+    dateInput.value = "";
+    dateInput.min = localISODate(0);
+    message.textContent = "";
+
+    tabs.querySelectorAll("button[data-day]").forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.day === "0"
+      );
+    });
+
+    renderSlots();
+
+    overlay.classList.add("is-open");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("booking-no-scroll");
+
+    closeBtn.focus();
+  }
+
+  function closeBooking() {
+    overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("booking-no-scroll");
+    message.textContent = "";
+  }
+
+  function updateSelection() {
+    const court = courts[currentCourt];
+
+    selectedText.textContent = chosenTime
+      ? `${chosenDate} · ${chosenTime} · $${court.price}/hour`
+      : "Select a time slot";
+
+    continueBtn.disabled = !chosenTime;
+
+    continueBtn.textContent = chosenTime
+      ? `Confirm ${chosenTime} · $${court.price}`
+      : "Choose a time slot";
+  }
+
+  function renderSlots() {
+    slots.innerHTML = "";
+
+    const busy = !dateInput.value
+      ? (unavailable[chosenDay] || [])
+      : [];
+
+    times.forEach(time => {
+      const button = document.createElement("button");
+
+      button.type = "button";
+      button.className = "booking-slot";
+      button.textContent = time;
+      button.disabled = busy.includes(time);
+
+      button.setAttribute(
+        "aria-pressed",
+        String(chosenTime === time)
+      );
+
+      if (chosenTime === time) {
+        button.classList.add("selected");
+      }
+
+      button.addEventListener("click", () => {
+        chosenTime = time;
+        message.textContent = "";
+        renderSlots();
+      });
+
+      slots.appendChild(button);
+    });
+
+    updateSelection();
+  }
+
+  // CONECTA LOS BOTONES BOOK COURT DE INDEXM.HTML
+  document.querySelectorAll(".go[data-court]").forEach(button => {
+    button.addEventListener("click", event => {
+      event.preventDefault();
+      openBooking(button.dataset.court);
+    });
+  });
+
+  // CERRAR CON LA X
+  closeBtn.addEventListener("click", closeBooking);
+
+  // CERRAR AL PULSAR FUERA DEL CUADRO
+  overlay.addEventListener("click", event => {
+    if (event.target === overlay) {
+      closeBooking();
+    }
+  });
+
+  // CERRAR CON ESCAPE
+  document.addEventListener("keydown", event => {
+    if (
+      event.key === "Escape" &&
+      overlay.classList.contains("is-open")
+    ) {
+      closeBooking();
+    }
+  });
+
+  // SELECCIONAR FECHA RÁPIDA
+  tabs.querySelectorAll("button[data-day]").forEach(button => {
+    button.addEventListener("click", () => {
+      chosenDay = Number(button.dataset.day);
+      chosenDate = localISODate(chosenDay);
+      chosenTime = "";
+      dateInput.value = "";
+      message.textContent = "";
+
+      tabs.querySelectorAll("button[data-day]").forEach(tab => {
+        tab.classList.toggle("active", tab === button);
+      });
+
+      renderSlots();
+    });
+  });
+
+  // SELECCIONAR FECHA PERSONALIZADA
+  dateInput.min = localISODate(0);
+
+  dateInput.addEventListener("change", () => {
+    if (!dateInput.value) return;
+
+    chosenDate = dateInput.value;
+    chosenDay = -1;
+    chosenTime = "";
+    message.textContent = "";
+
+    tabs.querySelectorAll("button[data-day]").forEach(button => {
+      button.classList.remove("active");
+    });
+
+    renderSlots();
+  });
+
+  // CONTINUAR CON LA RESERVA
+  continueBtn.addEventListener("click", () => {
+    if (!chosenTime) return;
+
+    const court = courts[currentCourt];
+
+    message.textContent =
+      `Selected: ${court.name}, ${chosenDate} at ${chosenTime}. ` +
+      "Demo only: connect your database to save a real booking.";
+  });
+})();
 </script>
 
+<!-- ===== JAVASCRIPT DEL MENÚ, FAQ Y FILTROS ===== -->
 <script>
-/* Read more -> community.html (respaldo por si algo bloquea el enlace) */
-document.getElementById('readMore').addEventListener('click', function(e){
-  e.preventDefault();
-  window.location.href = 'community.html';
+const menuButton = document.getElementById("bg");
+const navigation = document.getElementById("nav");
+
+if (menuButton && navigation) {
+  menuButton.addEventListener("click", () => {
+    navigation.classList.toggle("show");
+  });
+
+  navigation.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navigation.classList.remove("show");
+    });
+  });
+}
+
+// ABRIR Y CERRAR PREGUNTAS FRECUENTES
+document.querySelectorAll(".q button").forEach(button => {
+  button.addEventListener("click", () => {
+    button.parentElement.classList.toggle("open");
+  });
 });
+
+// FILTROS DEPORTIVOS
+document.querySelectorAll("#flt button").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("#flt button").forEach(item => {
+      item.classList.remove("on2");
+    });
+
+    button.classList.add("on2");
+
+    document.querySelectorAll(".cc").forEach(card => {
+      card.style.display =
+        button.dataset.s === "all" ||
+        card.dataset.s === button.dataset.s
+          ? ""
+          : "none";
+    });
+  });
+});
+
+// READ MORE: COMMUNITY
+const readMoreButton = document.getElementById("readMore");
+
+if (readMoreButton) {
+  readMoreButton.addEventListener("click", event => {
+    event.preventDefault();
+    window.location.href = "community.html";
+  });
+}
 </script>
 
+<!-- ===== SUPABASE ===== -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Sistema de reservas -->
-<script src="booking.js"></script>
 
-<!-- Aviso "You're in PRIME" después de iniciar sesión (no cambia el botón Sign In) -->
+<!-- ===== AVISO DESPUÉS DE INICIAR SESIÓN ===== -->
 <script>
 (() => {
   try {
     if (!sessionStorage.getItem("prime_welcome")) return;
+
     sessionStorage.removeItem("prime_welcome");
 
-    // Nombre (si existe) tomado de la sesión guardada por Supabase
     let name = "";
+
     for (const store of [localStorage, sessionStorage]) {
       for (let i = 0; i < store.length; i++) {
-        const k = store.key(i);
-        if (k && k.startsWith("sb-") && k.endsWith("-auth-token")) {
-          const u = JSON.parse(store.getItem(k) || "{}").user;
-          name = (u && u.user_metadata && (u.user_metadata.full_name || u.user_metadata.name)) || "";
+        const key = store.key(i);
+
+        if (
+          key &&
+          key.startsWith("sb-") &&
+          key.endsWith("-auth-token")
+        ) {
+          const userData = JSON.parse(
+            store.getItem(key) || "{}"
+          ).user;
+
+          name =
+            (
+              userData &&
+              userData.user_metadata &&
+              (
+                userData.user_metadata.full_name ||
+                userData.user_metadata.name
+              )
+            ) || "";
         }
       }
     }
+
     name = name.replace(/[<>&"]/g, "");
 
-    const t = document.createElement("div");
-    t.className = "prime-toast";
-    t.setAttribute("role", "status");
-    t.innerHTML = "🎉 You're in <b>PRIME</b>" + (name ? ", " + name : "") + "!";
-    document.body.appendChild(t);
-    requestAnimationFrame(() => t.classList.add("show"));
-    setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 400); }, 4000);
-  } catch (e) {}
+    const toast = document.createElement("div");
+    toast.className = "prime-toast";
+    toast.setAttribute("role", "status");
+
+    toast.innerHTML =
+      "🎉 You're in <b>PRIME</b>" +
+      (name ? ", " + name : "") +
+      "!";
+
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.classList.add("show");
+    });
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+
+      setTimeout(() => {
+        toast.remove();
+      }, 400);
+    }, 4000);
+
+  } catch (error) {
+    console.error("PRIME welcome notification:", error);
+  }
 })();
 </script>
 
