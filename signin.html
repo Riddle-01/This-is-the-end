@@ -12,9 +12,6 @@
     :root {
       --orange: #ff5a00;
       --black: #080808;
-      --panel: #141416;
-      --line: #29292d;
-      --muted: #99999f;
       --white: #f7f7f7;
     }
 
@@ -38,10 +35,6 @@
 
     button, input {
       font: inherit;
-    }
-
-    button {
-      -webkit-tap-highlight-color: transparent;
     }
 
     .topbar {
@@ -193,10 +186,6 @@
       font-size: 12px;
       cursor: pointer;
       padding: 7px;
-    }
-
-    .toggle-password:hover {
-      color: #fff;
     }
 
     .form-row {
@@ -433,13 +422,11 @@
     <a class="brand" href="index.html" aria-label="PRIME home">
       PRIME<span>.</span>
     </a>
-
     <a class="back" href="index.html">← Back to PRIME</a>
   </header>
 
   <main>
     <div class="layout">
-
       <section class="form-wrap" aria-labelledby="formTitle">
         <p class="eyebrow">Your account</p>
 
@@ -449,8 +436,7 @@
           Welcome back. Sign in to discover courts and connect with your sports community.
         </p>
 
-        <div id="message" class="message"
-             role="status" aria-live="polite"></div>
+        <div id="message" class="message" role="status" aria-live="polite"></div>
 
         <form id="authForm">
           <div class="field">
@@ -477,15 +463,12 @@
                 minlength="6"
                 required
               >
-              <button type="button" class="toggle-password"
-                      id="togglePassword">Show</button>
+              <button type="button" class="toggle-password" id="togglePassword">Show</button>
             </div>
           </div>
 
           <div class="field" id="confirmField" hidden>
-            <label class="field-label" for="confirmPassword">
-              CONFIRM PASSWORD
-            </label>
+            <label class="field-label" for="confirmPassword">CONFIRM PASSWORD</label>
             <div class="input-wrap">
               <input
                 type="password"
@@ -495,15 +478,12 @@
                 autocomplete="new-password"
                 minlength="6"
               >
-              <button type="button" class="toggle-password"
-                      id="toggleConfirm">Show</button>
+              <button type="button" class="toggle-password" id="toggleConfirm">Show</button>
             </div>
           </div>
 
           <div class="field" id="newPasswordField" hidden>
-            <label class="field-label" for="newPassword">
-              NEW PASSWORD
-            </label>
+            <label class="field-label" for="newPassword">NEW PASSWORD</label>
             <div class="input-wrap">
               <input
                 type="password"
@@ -513,8 +493,7 @@
                 autocomplete="new-password"
                 minlength="6"
               >
-              <button type="button" class="toggle-password"
-                      id="toggleNew">Show</button>
+              <button type="button" class="toggle-password" id="toggleNew">Show</button>
             </div>
           </div>
 
@@ -523,6 +502,7 @@
               <input type="checkbox" id="rememberMe" checked>
               Remember me
             </label>
+
             <a href="#" class="text-link" id="forgotPassword">
               Forgot password?
             </a>
@@ -608,7 +588,6 @@
           </p>
         </div>
       </aside>
-
     </div>
   </main>
 
@@ -617,17 +596,11 @@
     // 1. SUPABASE CONFIGURATION
     // ==========================================
 
-    const SUPABASE_URL =
-      "https://wpxubughlgccoazfbazh.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_mUWo-fARNnfj4mFQ4bpoGQ_Cigsm_A-";
+    const SUPABASE_URL = "https://TU-PROYECTO.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "TU-PUBLISHABLE-KEY";
 
     const $ = (id) => document.getElementById(id);
 
-    // Anota si esta carga de la página viene de un regreso de Google
-    // o de un enlace de correo. Hay que hacerlo ANTES de crear el cliente
-    // de Supabase, porque el cliente borra esos datos de la dirección.
     const isRecoveryLink =
       window.location.hash.includes("type=recovery");
 
@@ -681,7 +654,7 @@
           localStorage.removeItem(key);
           sessionStorage.removeItem(key);
         } catch {
-          // Storage may be unavailable in some browsers.
+          // Storage may be unavailable.
         }
       }
     };
@@ -689,6 +662,7 @@
     if (!window.supabase) {
       $("formDescription").textContent =
         "The authentication library could not load. Check your internet connection and reload the page.";
+
       submitButton.disabled = true;
       throw new Error("Supabase JavaScript library failed to load.");
     }
@@ -699,29 +673,40 @@
       {
         auth: {
           storage: authStorage,
-          persistSession: true,
           autoRefreshToken: true,
-          detectSessionInUrl: true
+          persistSession: true,
+          detectSessionInUrl: true,
+          flowType: "pkce"
         }
       }
     );
 
     // ==========================================
-    // 3. APPLICATION STATE
+    // 3. GENERAL FUNCTIONS
     // ==========================================
 
     let mode = "login";
     let busy = false;
     let recoveryMode = false;
 
-    const signinURL = () =>
-      new URL("signin.html", window.location.href).href;
+    function signinURL() {
+      return window.location.origin + window.location.pathname;
+    }
 
-    const homeURL = () =>
-      new URL("index.html", window.location.href).href;
+    function homeURL() {
+      return new URL("index.html", window.location.href).href;
+    }
 
-    function showMessage(text, type = "success") {
-      messageBox.textContent = text;
+    function redirectToHome() {
+      try {
+        sessionStorage.setItem("prime_welcome", "1");
+      } catch {}
+
+      window.location.replace(homeURL());
+    }
+
+    function showMessage(message, type = "error") {
+      messageBox.textContent = message;
       messageBox.className = "message show " + type;
     }
 
@@ -730,30 +715,18 @@
       messageBox.className = "message";
     }
 
-    function setBusy(value, label = "") {
-      busy = value;
+    function setBusy(state, text = "") {
+      busy = state;
+      submitButton.disabled = state;
+      googleButton.disabled = state;
+      appleButton.disabled = state;
 
-      submitButton.disabled = value;
-      googleButton.disabled = value;
-      appleButton.disabled = value;
-
-      if (value) {
-        submitButton.textContent = label || "Please wait...";
-        return;
+      if (state && text) {
+        submitButton.textContent = text;
+      } else {
+        submitButton.textContent =
+          mode === "login" ? "Sign in" : "Create account";
       }
-
-      submitButton.textContent = recoveryMode
-        ? "Update password"
-        : mode === "login"
-          ? "Sign in"
-          : "Create account";
-    }
-
-    // Lleva a la página principal (index.html) y deja una nota
-    // para que ahí aparezca el aviso "You're in PRIME".
-    function redirectToHome() {
-      try { sessionStorage.setItem("prime_welcome", "1"); } catch {}
-      window.location.replace(homeURL());
     }
 
     function friendlyError(error) {
@@ -1050,7 +1023,6 @@
           redirectToHome();
         } else {
           setMode("login");
-
           emailInput.value = email;
 
           showMessage(
@@ -1185,24 +1157,27 @@
       const query = new URLSearchParams(window.location.search);
       const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
 
-      // Los errores pueden venir en la dirección o después del #
       const authError =
         query.get("error_description") || query.get("error") ||
         hash.get("error_description") || hash.get("error");
 
       if (authError) {
-        showMessage("Authentication failed: " + authError.replace(/\+/g, " "), "error");
+        showMessage(
+          "Authentication failed: " + authError.replace(/\+/g, " "),
+          "error"
+        );
         return;
       }
 
       if (isRecoveryLink) {
-        $("formDescription").textContent = "Loading your password reset session...";
+        $("formDescription").textContent =
+          "Loading your password reset session...";
         return;
       }
 
       try {
-        // getSession espera a que Supabase termine de procesar el regreso de Google
         const { data, error } = await supabaseClient.auth.getSession();
+
         if (error) throw error;
 
         console.log("PRIME auth:", {
