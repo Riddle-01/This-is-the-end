@@ -1043,12 +1043,13 @@
         showMessage(error.message || "The reservation could not be saved.", true);
       }
       await renderSlots();
+      showMessage("That time could not be reserved. Please choose another slot.", true);
       return;
     }
 
     chosenTime = "";
-    showMessage("Reservation request saved! Its status is pending confirmation.");
     await renderSlots();
+    showMessage("Reservation request saved! Its status is pending confirmation.");
   });
 
   loadCourts().catch(error => console.error("Could not load PRIME courts:", error));
