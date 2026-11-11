@@ -1114,75 +1114,93 @@ if (readMoreButton) {
 
 <!-- ===== FORMULARIO DE CONTACTO PRIME ===== -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("contactForm");
-  const button = document.getElementById("contactSubmit");
-  const feedback = document.getElementById("contactFeedback");
-  const nameInput = document.getElementById("contactName");
-  const emailInput = document.getElementById("contactEmail");
-  const messageInput = document.getElementById("contactMessage");
+(() => {
+  const initContactForm = () => {
+    const form = document.getElementById("contactForm");
+    const button = document.getElementById("contactSubmit");
+    const feedback = document.getElementById("contactFeedback");
+    const nameInput = document.getElementById("contactName");
+    const emailInput = document.getElementById("contactEmail");
+    const messageInput = document.getElementById("contactMessage");
 
-  if (!form || !button || !feedback || !nameInput || !emailInput || !messageInput) {
-    console.error("PRIME contact form: faltan elementos del formulario.");
-    return;
-  }
+    if (!form || !button || !feedback || !nameInput || !emailInput || !messageInput) return;
+    if (form.dataset.primeContactReady === "true") return;
+    form.dataset.primeContactReady = "true";
 
-  const showFeedback = (text, success) => {
-    feedback.textContent = text;
-    feedback.style.color = success ? "#35c987" : "#ff6b4a";
+    const status = (text, ok) => {
+      feedback.textContent = text;
+      feedback.style.color = ok ? "#35c987" : "#ff6b4a";
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const message = messageInput.value.trim();
+
+      if (!name || !email || !message) {
+        status("Please complete all fields.", false);
+        return;
+      }
+      if (name.length < 2 || message.length < 5 || !emailInput.checkValidity()) {
+        status("Please enter a valid name, email and message.", false);
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "SENDING...";
+      status("Sending your message...", true);
+
+      let timeoutId;
+      try {
+        if (!window.supabase || !window.supabase.createClient) {
+          throw new Error("Supabase library did not load. Refresh the page and try again.");
+        }
+
+        const timedFetch = (url, options = {}) => {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 12000);
+          return fetch(url, { ...options, signal: controller.signal })
+            .finally(() => clearTimeout(timer));
+        };
+
+        const client = window.supabase.createClient(
+          "https://lykigrvkzkvwpeqgmxjq.supabase.co",
+          "sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8",
+          { global: { fetch: timedFetch } }
+        );
+
+        const result = await client.from("contact_messages").insert({
+          name: name,
+          email: email,
+          message: message
+        });
+
+        if (result.error) throw result.error;
+
+        form.reset();
+        status("Your message was sent successfully. Thank you!", true);
+      } catch (error) {
+        console.error("PRIME contact form:", error);
+        const detail = error && error.name === "AbortError"
+          ? "The connection timed out. Please check your internet and try again."
+          : (error && error.message ? error.message : "Unknown connection error.");
+        status("Could not send: " + detail, false);
+      } finally {
+        button.disabled = false;
+        button.textContent = "SEND MESSAGE";
+      }
+    });
   };
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const name = nameInput.value.trim();
-    const email = emailInput.value.trim();
-    const message = messageInput.value.trim();
-
-    if (name.length < 2 || !emailInput.checkValidity() || message.length < 5) {
-      showFeedback("Please enter your name, a valid email, and a message.", false);
-      form.reportValidity();
-      return;
-    }
-
-    if (!window.supabase || typeof window.supabase.createClient !== "function") {
-      showFeedback("Connection is unavailable. Please refresh and try again.", false);
-      console.error("PRIME contact form: Supabase JS did not load.");
-      return;
-    }
-
-    button.disabled = true;
-    button.textContent = "SENDING...";
-    showFeedback("Sending your message...", true);
-
-    try {
-      const supabase = window.supabase.createClient(
-        "https://lykigrvkzkvwpeqgmxjq.supabase.co",
-        "sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8"
-      );
-
-      const { error } = await supabase
-        .from("contact_messages")
-        .insert({ name, email, message });
-
-      if (error) throw error;
-
-      form.reset();
-      showFeedback("Message sent successfully! Thank you for contacting PRIME.", true);
-    } catch (error) {
-      console.error("PRIME contact form submission failed:", error);
-      showFeedback(
-        error && error.message
-          ? "Message could not be sent: " + error.message
-          : "Message could not be sent. Please try again.",
-        false
-      );
-    } finally {
-      button.disabled = false;
-      button.textContent = "SEND MESSAGE";
-    }
-  });
-});
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initContactForm, { once: true });
+  } else {
+    initContactForm();
+  }
+})();
 </script>
 
 <!-- ===== SUPABASE ===== -->
