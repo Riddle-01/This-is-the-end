@@ -1037,13 +1037,12 @@
 
     if (error) {
       console.error("Reservation error:", error);
-      if (error.code === "23P01" || (error.message || "").toLowerCase().includes("overlap")) {
-        showMessage("That time was just reserved. Choose another available time.", true);
-      } else {
-        showMessage(error.message || "The reservation could not be saved.", true);
-      }
+      const errorText =
+        error.code === "23P01" || (error.message || "").toLowerCase().includes("overlap")
+          ? "That time was just reserved. Choose another available time."
+          : (error.message || "The reservation could not be saved.");
       await renderSlots();
-      showMessage("That time could not be reserved. Please choose another slot.", true);
+      showMessage(errorText, true);
       return;
     }
 
