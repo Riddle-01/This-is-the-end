@@ -622,19 +622,21 @@
       <p class="lbl">Contact</p>
       <h2>Let's talk?</h2>
 
-      <form onsubmit="return false">
-        <label class="fl">NAME</label>
-        <input placeholder="Your full name">
+      <form id="contactForm">
+        <label class="fl" for="contactName">NAME</label>
+        <input id="contactName" name="name" type="text" placeholder="Your full name" required minlength="2" maxlength="100" autocomplete="name">
 
-        <label class="fl">EMAIL</label>
-        <input type="email" placeholder="you@example.com">
+        <label class="fl" for="contactEmail">EMAIL</label>
+        <input id="contactEmail" name="email" type="email" placeholder="you@example.com" required maxlength="254" autocomplete="email">
 
-        <label class="fl">MESSAGE</label>
-        <textarea placeholder="Tell us how we can help"></textarea>
+        <label class="fl" for="contactMessage">MESSAGE</label>
+        <textarea id="contactMessage" name="message" placeholder="Tell us how we can help" required minlength="5" maxlength="3000"></textarea>
 
-        <button class="btn" type="button" style="margin-top:16px">
+        <button class="btn" id="contactSubmit" type="submit" style="margin-top:16px">
           Send message
         </button>
+
+        <p id="contactFeedback" role="status" aria-live="polite" style="min-height:20px;margin:12px 0 0;font-size:13px;text-align:center"></p>
 
         <div class="chips">
           <a href="mailto:hello@prime.app">✉ hello@prime.app</a>
@@ -1107,6 +1109,61 @@ if (readMoreButton) {
     window.location.href = "community.html";
   });
 }
+</script>
+
+
+<!-- ===== FORMULARIO DE CONTACTO PRIME ===== -->
+<script>
+(() => {
+  const form = document.getElementById("contactForm");
+  if (!form || !window.supabase) return;
+
+  const client = window.supabase.createClient(
+    "https://lykigrvkzkvwpeqgmxjq.supabase.co",
+    "sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8"
+  );
+
+  const submitButton = document.getElementById("contactSubmit");
+  const feedback = document.getElementById("contactFeedback");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const name = form.elements.name.value.trim();
+    const email = form.elements.email.value.trim();
+    const message = form.elements.message.value.trim();
+
+    if (name.length < 2 || message.length < 5) {
+      feedback.textContent = "Please complete all fields correctly.";
+      feedback.style.color = "#ff6b4a";
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Sending...";
+    feedback.textContent = "";
+
+    try {
+      const { error } = await client
+        .from("contact_messages")
+        .insert([{ name, email, message }]);
+
+      if (error) throw error;
+
+      form.reset();
+      feedback.textContent = "Your message was sent successfully. Thank you!";
+      feedback.style.color = "#35c987";
+    } catch (error) {
+      console.error("PRIME contact form error:", error);
+      feedback.textContent = "We couldn't send your message. Please try again.";
+      feedback.style.color = "#ff6b4a";
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = "Send message";
+    }
+  });
+})();
 </script>
 
 <!-- ===== SUPABASE ===== -->
