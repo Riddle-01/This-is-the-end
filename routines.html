@@ -76,6 +76,7 @@
         <h2>CUSTOMIZE YOUR <span>TRAINING</span></h2>
         <p>Choose the preferences that help you build a balanced plan at your own pace.</p>
       </div>
+      <p class="privacy-note" id="account-status" role="status">Connecting to your PRIME account...</p>
       <form id="plan-form" class="plan-form">
         <section class="form-panel">
           <h3><span class="panel-icon">🧍</span> About You</h3>
@@ -118,7 +119,7 @@
         </section>
         <button class="primary-btn save-plan" type="submit">💾 Save My Plan</button>
         <p class="form-message" id="form-message" role="status"></p>
-        <p class="privacy-note">Your preferences are saved in this browser on this device.</p>
+        <p class="privacy-note">Your preferences and custom routines are saved to your PRIME account.</p>
       </form>
     </section>
   </main>
@@ -148,6 +149,7 @@
       <div class="dialog-actions"><button class="primary-btn" id="submit-routine" type="submit">Create Routine</button><button class="cancel-btn" type="button" id="cancel-dialog">Cancel</button></div>
     </form>
   </dialog>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="routines.js" defer></script>
 </body>
 </html>
