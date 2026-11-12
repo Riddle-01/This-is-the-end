@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <title>PRIME | Interactive Courts Map</title>
+  <link rel="icon" type="image/svg+xml" href="prime-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="map.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="PRIME home">
+      <img src="prime-logo.svg" alt="">
+      <span>PRIME</span>
+    </a>
+    <a class="back-link" href="index.html#courts">← Back to courts</a>
+  </header>
+
+  <main class="layout">
+    <aside class="panel">
+      <div class="intro">
+        <p class="eyebrow">FIND YOUR PLACE</p>
+        <h1>Explore<br><span>the courts.</span></h1>
+        <p class="intro-copy">Find available sports spaces and explore their locations around La Chorrera.</p>
+      </div>
+
+      <label class="search-box" for="court-search">
+        <span aria-hidden="true">⌕</span>
+        <input id="court-search" type="search" placeholder="Search courts or sports..." autocomplete="off">
+      </label>
+
+      <div class="filters" id="filters" aria-label="Filter courts">
+        <button class="filter active" type="button" data-filter="all">All sports</button>
+        <button class="filter" type="button" data-filter="soccer">Football</button>
+        <button class="filter" type="button" data-filter="volleyball">Volleyball</button>
+        <button class="filter" type="button" data-filter="swimming">Swimming</button>
+      </div>
+
+      <div class="list-heading">
+        <span>COURTS</span>
+        <span id="court-count">Loading...</span>
+      </div>
+      <div class="court-list" id="court-list" aria-live="polite">
+        <div class="state-message">Loading courts from PRIME...</div>
+      </div>
+
+      <div class="map-note">
+        <span class="note-dot"></span>
+        <p>The map currently identifies the general La Chorrera area. Exact pins will appear once individual court coordinates are added.</p>
+      </div>
+    </aside>
+
+    <section class="map-section" aria-label="Interactive map">
+      <div id="map" role="application" aria-label="Map of PRIME court locations"></div>
+      <div class="map-overlay">
+        <span class="live-dot"></span>
+        <span>PRIME COURT MAP</span>
+      </div>
+      <div class="legend">
+        <strong>SPORT TYPES</strong>
+        <span><i class="legend-dot soccer"></i>Football</span>
+        <span><i class="legend-dot volleyball"></i>Volleyball</span>
+        <span><i class="legend-dot swimming"></i>Swimming</span>
+      </div>
+      <div class="map-credit">Map data © OpenStreetMap contributors</div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="map.js"></script>
+</body>
+</html>
