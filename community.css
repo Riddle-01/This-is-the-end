@@ -31,3 +31,7 @@
 .coach-photo{width:104px;height:104px;object-fit:cover;border-radius:50%;border:2px solid #f04412;box-shadow:0 0 28px #f0441230}.athlete-visual .coach-photo{position:relative}.athlete-visual .sport-tag{z-index:1}
 /* PRIME logo lockup */
 .brand{display:inline-flex;align-items:center;gap:9px;white-space:nowrap}.brand>img{display:block;width:30px;height:32px;object-fit:contain;flex:0 0 auto}.brand-word{display:inline-flex;align-items:baseline}.brand-word>span{color:var(--orange)}
+
+
+/* Consistent official PRIME white logo lockup */
+.brand{display:inline-flex;align-items:center;gap:9px;color:#fff!important;white-space:nowrap}.brand>img{display:block;width:30px;height:32px;object-fit:contain;flex:0 0 auto}.brand-word{color:#fff!important;font-size:inherit;font-weight:900;letter-spacing:-1.5px}.brand-word span{color:#fff!important}.footer .brand{display:inline-flex;align-items:center;justify-content:center;color:#fff!important}.footer .brand-word{color:#fff!important}
