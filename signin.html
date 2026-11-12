@@ -727,7 +727,6 @@ const rememberMe = $("rememberMe");
 
       submitButton.disabled = value;
       googleButton.disabled = value;
-      appleButton.disabled = value;
 
       if (value) {
         submitButton.textContent = label || "Please wait...";
@@ -1133,10 +1132,6 @@ const rememberMe = $("rememberMe");
 
     googleButton.addEventListener("click", () => {
       signInWithProvider("google");
-    });
-
-    appleButton.addEventListener("click", () => {
-      signInWithProvider("apple");
     });
 
     // ==========================================
