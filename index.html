@@ -622,19 +622,21 @@
       <p class="lbl">Contact</p>
       <h2>Let's talk?</h2>
 
-      <form onsubmit="return false">
-        <label class="fl">NAME</label>
-        <input placeholder="Your full name">
+      <form id="contactForm">
+        <label class="fl" for="contactName">NAME</label>
+        <input id="contactName" name="name" type="text" placeholder="Your full name" required minlength="2" maxlength="100" autocomplete="name">
 
-        <label class="fl">EMAIL</label>
-        <input type="email" placeholder="you@example.com">
+        <label class="fl" for="contactEmail">EMAIL</label>
+        <input id="contactEmail" name="email" type="email" placeholder="you@example.com" required maxlength="254" autocomplete="email">
 
-        <label class="fl">MESSAGE</label>
-        <textarea placeholder="Tell us how we can help"></textarea>
+        <label class="fl" for="contactMessage">MESSAGE</label>
+        <textarea id="contactMessage" name="message" placeholder="Tell us how we can help" required minlength="5" maxlength="3000"></textarea>
 
-        <button class="btn" type="button" style="margin-top:16px">
+        <button class="btn" id="contactSubmit" type="submit" style="margin-top:16px">
           Send message
         </button>
+
+        <p id="contactFeedback" role="status" aria-live="polite" style="min-height:20px;margin:12px 0 0;font-size:13px;text-align:center"></p>
 
         <div class="chips">
           <a href="mailto:hello@prime.app">✉ hello@prime.app</a>
@@ -770,10 +772,16 @@
   </section>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <!-- ===== JAVASCRIPT DEL POPUP ===== -->
 <script>
 (() => {
   "use strict";
+
+  const SUPABASE_URL = "https://lykigrvkzkvwpeqgmxjq.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   const overlay = document.getElementById("bookingOverlay");
   const closeBtn = document.getElementById("bookingClose");
@@ -789,165 +797,187 @@
   const continueBtn = document.getElementById("bookingContinue");
   const message = document.getElementById("bookingMessage");
 
-  if (!overlay || !closeBtn || !tabs || !slots || !continueBtn) {
-    return;
-  }
+  if (!overlay || !closeBtn || !tabs || !slots || !continueBtn) return;
 
   const courts = {
-    pool: {
-      name: "La Chorrera Municipal Pool",
-      price: 25,
-      sport: "SWIMMING POOL",
-      rating: "★ 4.6",
-      image: "pool.jpg"
-    },
-
-    volley: {
-      name: "La Chorrera Volley Court",
-      price: 40,
-      sport: "VOLLEYBALL",
-      rating: "★ 4.7",
-      image: "volley.jpg"
-    },
-
-    turf: {
-      name: "La Chorrera Turf Pitch",
-      price: 28,
-      sport: "SOCCER / TURF",
-      rating: "★ 4.8",
-      image: "turf.jpg"
-    }
+    pool: { name: "La Chorrera Municipal Pool", sport: "SWIMMING POOL", rating: "★ 4.6", image: "pool.jpg" },
+    volley: { name: "La Chorrera Volley Court", sport: "VOLLEYBALL", rating: "★ 4.7", image: "volley.jpg" },
+    turf: { name: "La Chorrera Turf Pitch", sport: "SOCCER / TURF", rating: "★ 4.8", image: "turf.jpg" }
   };
 
-  const times = [
-    "9:00 AM",
-    "10:00 AM",
-    "11:00 AM",
-    "12:00 PM",
-    "1:00 PM",
-    "2:00 PM",
-    "3:00 PM",
-    "4:00 PM",
-    "5:00 PM"
-  ];
-
-  // Horarios de demostración; no son reservas reales.
-  const unavailable = {
-    0: ["10:00 AM", "1:00 PM", "4:00 PM"],
-    1: ["9:00 AM", "2:00 PM"],
-    2: ["11:00 AM", "3:00 PM"]
-  };
-
+  const times = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"];
   let currentCourt = "pool";
   let chosenTime = "";
   let chosenDay = 0;
   let chosenDate = localISODate(0);
+  let loadingSlots = false;
+  let slotRequest = 0;
 
   function localISODate(offset = 0) {
     const date = new Date();
     date.setDate(date.getDate() + offset);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
+    return date.getFullYear() + "-" +
+      String(date.getMonth() + 1).padStart(2, "0") + "-" +
+      String(date.getDate()).padStart(2, "0");
   }
 
-  function openBooking(key) {
-    currentCourt = courts[key] ? key : "pool";
+  function showMessage(text, isError = false) {
+    message.textContent = text;
+    message.style.color = isError ? "#b42318" : "#137547";
+  }
 
+  async function loadCourts() {
+    const { data, error } = await supabaseClient
+      .from("courts")
+      .select("id,name,sport,hourly_rate,image_url,location")
+      .eq("is_active", true);
+
+    if (error) throw error;
+
+    (data || []).forEach(row => {
+      const item = Object.values(courts).find(c => c.name === row.name);
+      if (!item) return;
+      item.id = row.id;
+      item.price = Number(row.hourly_rate);
+      item.image = row.image_url || item.image;
+      item.location = row.location || "";
+      item.sport = (row.sport || item.sport).toUpperCase();
+    });
+  }
+
+  function time24(label) {
+    const parts = label.split(" ");
+    const hm = parts[0].split(":");
+    let hour = Number(hm[0]);
+    const minute = Number(hm[1]);
+    if (parts[1] === "PM" && hour !== 12) hour += 12;
+    if (parts[1] === "AM" && hour === 12) hour = 0;
+    return String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
+  }
+
+  function slotStart(label) {
+    return new Date(chosenDate + "T" + time24(label) + ":00-05:00");
+  }
+
+  function updateSelection() {
     const court = courts[currentCourt];
+    selectedText.textContent = chosenTime
+      ? chosenDate + " · " + chosenTime + " · $" + court.price + "/hour"
+      : "Select a time slot";
+    continueBtn.disabled = !chosenTime || loadingSlots;
+    continueBtn.textContent = chosenTime
+      ? "Confirm " + chosenTime + " · $" + court.price
+      : "Choose a time slot";
+  }
 
+  async function renderSlots() {
+    const request = ++slotRequest;
+    const court = courts[currentCourt];
+    slots.innerHTML = "";
     chosenTime = "";
-    chosenDay = 0;
-    chosenDate = localISODate(0);
+    loadingSlots = true;
+    updateSelection();
 
-    title.textContent = court.name;
-    price.textContent = `$${court.price}`;
-    sport.textContent = court.sport;
-    rating.textContent = court.rating;
+    if (!court.id) {
+      showMessage("This court is not registered in the database yet.", true);
+      loadingSlots = false;
+      updateSelection();
+      return;
+    }
 
-    photo.style.backgroundImage = `url("${court.image}")`;
-
-    dateInput.value = "";
-    dateInput.min = localISODate(0);
-    message.textContent = "";
-
-    tabs.querySelectorAll("button[data-day]").forEach(button => {
-      button.classList.toggle(
-        "active",
-        button.dataset.day === "0"
-      );
+    showMessage("Checking availability...");
+    const { data, error } = await supabaseClient.rpc("get_court_busy_slots", {
+      p_court_id: court.id,
+      p_day: chosenDate
     });
 
-    renderSlots();
+    if (request !== slotRequest) return;
 
-    overlay.classList.add("is-open");
-    overlay.setAttribute("aria-hidden", "false");
-    document.body.classList.add("booking-no-scroll");
+    if (error) {
+      console.error("Availability error:", error);
+      showMessage("Could not load availability. Please try again.", true);
+      loadingSlots = false;
+      updateSelection();
+      return;
+    }
 
-    closeBtn.focus();
+    const busy = data || [];
+    const now = new Date();
+
+    times.forEach(label => {
+      const start = slotStart(label);
+      const end = new Date(start.getTime() + 60 * 60 * 1000);
+      const occupied = busy.some(item =>
+        new Date(item.starts_at) < end && new Date(item.ends_at) > start
+      );
+      const isPast = start <= now;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "booking-slot";
+      button.textContent = label;
+      button.disabled = occupied || isPast;
+      button.title = occupied ? "Already reserved" : (isPast ? "Time has passed" : "Available");
+
+      button.addEventListener("click", () => {
+        chosenTime = label;
+        showMessage("");
+        slots.querySelectorAll(".booking-slot").forEach(slot => {
+          slot.classList.toggle("selected", slot === button);
+          slot.setAttribute("aria-pressed", String(slot === button));
+        });
+        updateSelection();
+      });
+
+      slots.appendChild(button);
+    });
+
+    loadingSlots = false;
+    showMessage("Available times are up to date.");
+    updateSelection();
+  }
+
+  async function openBooking(key) {
+    currentCourt = courts[key] ? key : "pool";
+    const court = courts[currentCourt];
+
+    try {
+      if (!court.id) await loadCourts();
+      if (!court.id) {
+        showMessage("Court information could not be found in Supabase.", true);
+        return;
+      }
+
+      chosenDay = 0;
+      chosenDate = localISODate(0);
+      dateInput.value = "";
+      title.textContent = court.name;
+      price.textContent = "$" + court.price;
+      sport.textContent = court.sport;
+      rating.textContent = court.rating;
+      photo.style.backgroundImage = 'url("' + court.image + '")';
+      dateInput.min = localISODate(0);
+      tabs.querySelectorAll("button[data-day]").forEach(button => {
+        button.classList.toggle("active", button.dataset.day === "0");
+      });
+
+      overlay.classList.add("is-open");
+      overlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("booking-no-scroll");
+      await renderSlots();
+      closeBtn.focus();
+    } catch (error) {
+      console.error("Could not open booking:", error);
+      showMessage("Could not connect to PRIME. Check your connection and try again.", true);
+    }
   }
 
   function closeBooking() {
     overlay.classList.remove("is-open");
     overlay.setAttribute("aria-hidden", "true");
     document.body.classList.remove("booking-no-scroll");
-    message.textContent = "";
+    showMessage("");
   }
 
-  function updateSelection() {
-    const court = courts[currentCourt];
-
-    selectedText.textContent = chosenTime
-      ? `${chosenDate} · ${chosenTime} · $${court.price}/hour`
-      : "Select a time slot";
-
-    continueBtn.disabled = !chosenTime;
-
-    continueBtn.textContent = chosenTime
-      ? `Confirm ${chosenTime} · $${court.price}`
-      : "Choose a time slot";
-  }
-
-  function renderSlots() {
-    slots.innerHTML = "";
-
-    const busy = !dateInput.value
-      ? (unavailable[chosenDay] || [])
-      : [];
-
-    times.forEach(time => {
-      const button = document.createElement("button");
-
-      button.type = "button";
-      button.className = "booking-slot";
-      button.textContent = time;
-      button.disabled = busy.includes(time);
-
-      button.setAttribute(
-        "aria-pressed",
-        String(chosenTime === time)
-      );
-
-      if (chosenTime === time) {
-        button.classList.add("selected");
-      }
-
-      button.addEventListener("click", () => {
-        chosenTime = time;
-        message.textContent = "";
-        renderSlots();
-      });
-
-      slots.appendChild(button);
-    });
-
-    updateSelection();
-  }
-
-  // CONECTA LOS BOTONES BOOK COURT DE INDEXM.HTML
   document.querySelectorAll(".go[data-court]").forEach(button => {
     button.addEventListener("click", event => {
       event.preventDefault();
@@ -955,71 +985,75 @@
     });
   });
 
-  // CERRAR CON LA X
   closeBtn.addEventListener("click", closeBooking);
-
-  // CERRAR AL PULSAR FUERA DEL CUADRO
   overlay.addEventListener("click", event => {
-    if (event.target === overlay) {
-      closeBooking();
-    }
+    if (event.target === overlay) closeBooking();
   });
-
-  // CERRAR CON ESCAPE
   document.addEventListener("keydown", event => {
-    if (
-      event.key === "Escape" &&
-      overlay.classList.contains("is-open")
-    ) {
-      closeBooking();
-    }
+    if (event.key === "Escape" && overlay.classList.contains("is-open")) closeBooking();
   });
 
-  // SELECCIONAR FECHA RÁPIDA
   tabs.querySelectorAll("button[data-day]").forEach(button => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       chosenDay = Number(button.dataset.day);
       chosenDate = localISODate(chosenDay);
-      chosenTime = "";
       dateInput.value = "";
-      message.textContent = "";
-
       tabs.querySelectorAll("button[data-day]").forEach(tab => {
         tab.classList.toggle("active", tab === button);
       });
-
-      renderSlots();
+      await renderSlots();
     });
   });
 
-  // SELECCIONAR FECHA PERSONALIZADA
   dateInput.min = localISODate(0);
-
-  dateInput.addEventListener("change", () => {
+  dateInput.addEventListener("change", async () => {
     if (!dateInput.value) return;
-
     chosenDate = dateInput.value;
     chosenDay = -1;
-    chosenTime = "";
-    message.textContent = "";
-
-    tabs.querySelectorAll("button[data-day]").forEach(button => {
-      button.classList.remove("active");
-    });
-
-    renderSlots();
+    tabs.querySelectorAll("button[data-day]").forEach(button => button.classList.remove("active"));
+    await renderSlots();
   });
 
-  // CONTINUAR CON LA RESERVA
-  continueBtn.addEventListener("click", () => {
-    if (!chosenTime) return;
+  continueBtn.addEventListener("click", async () => {
+    if (!chosenTime || loadingSlots) return;
 
+    const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !userData.user) {
+      showMessage("Please sign in before booking a court.", true);
+      return;
+    }
+
+    const start = slotStart(chosenTime);
+    const end = new Date(start.getTime() + 60 * 60 * 1000);
     const court = courts[currentCourt];
 
-    message.textContent =
-      `Selected: ${court.name}, ${chosenDate} at ${chosenTime}. ` +
-      "Demo only: connect your database to save a real booking.";
+    continueBtn.disabled = true;
+    continueBtn.textContent = "Saving reservation...";
+
+    const { error } = await supabaseClient.from("reservations").insert({
+      user_id: userData.user.id,
+      court_id: court.id,
+      starts_at: start.toISOString(),
+      ends_at: end.toISOString()
+    });
+
+    if (error) {
+      console.error("Reservation error:", error);
+      const errorText =
+        error.code === "23P01" || (error.message || "").toLowerCase().includes("overlap")
+          ? "That time was just reserved. Choose another available time."
+          : (error.message || "The reservation could not be saved.");
+      await renderSlots();
+      showMessage(errorText, true);
+      return;
+    }
+
+    chosenTime = "";
+    await renderSlots();
+    showMessage("Reservation request saved! Its status is pending confirmation.");
   });
+
+  loadCourts().catch(error => console.error("Could not load PRIME courts:", error));
 })();
 </script>
 
@@ -1077,8 +1111,100 @@ if (readMoreButton) {
 }
 </script>
 
+
+<!-- ===== FORMULARIO DE CONTACTO PRIME ===== -->
+<script>
+(() => {
+  const initContactForm = () => {
+    const form = document.getElementById("contactForm");
+    const button = document.getElementById("contactSubmit");
+    const feedback = document.getElementById("contactFeedback");
+    const nameInput = document.getElementById("contactName");
+    const emailInput = document.getElementById("contactEmail");
+    const messageInput = document.getElementById("contactMessage");
+
+    if (!form || !button || !feedback || !nameInput || !emailInput || !messageInput) return;
+    if (form.dataset.primeContactReady === "true") return;
+    form.dataset.primeContactReady = "true";
+
+    const status = (text, ok) => {
+      feedback.textContent = text;
+      feedback.style.color = ok ? "#35c987" : "#ff6b4a";
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const message = messageInput.value.trim();
+
+      if (!name || !email || !message) {
+        status("Please complete all fields.", false);
+        return;
+      }
+      if (name.length < 2 || message.length < 5 || !emailInput.checkValidity()) {
+        status("Please enter a valid name, email and message.", false);
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "SENDING...";
+      status("Sending your message...", true);
+
+      let timeoutId;
+      try {
+        if (!window.supabase || !window.supabase.createClient) {
+          throw new Error("Supabase library did not load. Refresh the page and try again.");
+        }
+
+        const timedFetch = (url, options = {}) => {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 12000);
+          return fetch(url, { ...options, signal: controller.signal })
+            .finally(() => clearTimeout(timer));
+        };
+
+        const client = window.supabase.createClient(
+          "https://lykigrvkzkvwpeqgmxjq.supabase.co",
+          "sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8",
+          { global: { fetch: timedFetch } }
+        );
+
+        const result = await client.from("contact_messages").insert({
+          name: name,
+          email: email,
+          message: message
+        });
+
+        if (result.error) throw result.error;
+
+        form.reset();
+        status("Your message was sent successfully. Thank you!", true);
+      } catch (error) {
+        console.error("PRIME contact form:", error);
+        const detail = error && error.name === "AbortError"
+          ? "The connection timed out. Please check your internet and try again."
+          : (error && error.message ? error.message : "Unknown connection error.");
+        status("Could not send: " + detail, false);
+      } finally {
+        button.disabled = false;
+        button.textContent = "SEND MESSAGE";
+      }
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initContactForm, { once: true });
+  } else {
+    initContactForm();
+  }
+})();
+</script>
+
 <!-- ===== SUPABASE ===== -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <!-- ===== AVISO DESPUÉS DE INICIAR SESIÓN ===== -->
 <script>

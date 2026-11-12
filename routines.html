@@ -1,417 +1,153 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRIME | Personal Training</title>
-    <link rel="stylesheet" href="routines.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080909">
+  <title>PRIME | Routines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="routines.css">
 </head>
-
 <body>
+  <header class="site-header">
+    <a class="brand" href="Indexm.html">PRIME<span>.</span></a>
+    <nav aria-label="Main navigation">
+      <a href="Indexm.html">Home</a><a class="current" href="#routines">Routines</a><a href="#customize">Customize Plan</a>
+    </nav>
+    <a class="back-link" href="Indexm.html">← Back to PRIME</a>
+  </header>
 
-    <!-- HEADER -->
-    <header class="header">
-        <a href="Index.html" class="logo">PRIME<span>.</span></a>
-
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#routines">Routines</a>
-            <a href="#customize">Customize Plan</a>
-        </nav>
-
-        <a href="Index.html" class="back-button">Back to PRIME ↗</a>
-    </header>
-
-    <!-- HERO -->
+  <main>
     <section class="hero" id="home">
-        <div class="hero-content">
-            <p class="eyebrow">YOUR TRAINING. YOUR RULES.</p>
-
-            <h1>BUILD YOUR<br>BEST <span>BODY</span></h1>
-
-            <p class="hero-description">
-                Discover routines designed for your goals, your level,
-                and your lifestyle. Start training smarter today.
-            </p>
-
-            <div class="hero-buttons">
-                <a href="#routines" class="btn btn-orange">View Routines ↗</a>
-                <a href="#customize" class="btn btn-outline">Customize Plan</a>
-            </div>
-
-            <div class="stats">
-                <div>
-                    <h2>6<span>+</span></h2>
-                    <p>BASE ROUTINES</p>
-                </div>
-
-                <div>
-                    <h2>100<span>%</span></h2>
-                    <p>PERSONALIZED</p>
-                </div>
-
-                <div>
-                    <h2>24<span>/7</span></h2>
-                    <p>YOUR PACE</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="hero-image">
-            <div class="image-overlay">
-                <p>TRAIN WITH PURPOSE.</p>
-                <h3>BE YOUR<br>OWN PRIME.</h3>
-            </div>
-        </div>
+      <div class="hero-glow"></div>
+      <p class="eyebrow">YOUR TRAINING. YOUR RULES.</p>
+      <h1>BUILD YOUR<br><span>BEST BODY</span></h1>
+      <p class="hero-copy">Customize your workouts, track your progress, and train smarter. Edit routines to match your goals, schedule, and budget.</p>
+      <div class="hero-actions">
+        <a class="primary-btn" href="#routines">💪 View Routines</a>
+        <a class="secondary-btn" href="#customize">🎯 Customize Plan</a>
+      </div>
+      <div class="stats">
+        <div><strong>6+</strong><span>BASE ROUTINES</span></div>
+        <div><strong>100%</strong><span>EDITABLE</span></div>
+        <div><strong>24/7</strong><span>YOUR PACE</span></div>
+      </div>
     </section>
 
-    <!-- CHOOSE BASE ROUTINE -->
-    <section class="base-routine section-dark">
-        <div class="section-heading">
-            <p class="eyebrow">FIND YOUR STARTING POINT</p>
-            <h2>CHOOSE YOUR BASE <span>ROUTINE</span></h2>
-            <p>Select a routine to explore its focus and exercises.</p>
-        </div>
-
-        <div class="routine-selector">
-
-            <div class="routine-list">
-                <button class="routine-option active">
-                    <span>01</span>
-                    <div>
-                        <h3>Full Body Blast</h3>
-                        <p>Full body · All levels</p>
-                    </div>
-                    <span class="arrow">↗</span>
-                </button>
-
-                <button class="routine-option">
-                    <span>02</span>
-                    <div>
-                        <h3>Upper Body Power</h3>
-                        <p>Upper body · Strength</p>
-                    </div>
-                    <span class="arrow">↗</span>
-                </button>
-
-                <button class="routine-option">
-                    <span>03</span>
-                    <div>
-                        <h3>Lower Body Strength</h3>
-                        <p>Legs · Strength</p>
-                    </div>
-                    <span class="arrow">↗</span>
-                </button>
-
-                <button class="routine-option">
-                    <span>04</span>
-                    <div>
-                        <h3>Core Crusher</h3>
-                        <p>Core · Stability</p>
-                    </div>
-                    <span class="arrow">↗</span>
-                </button>
-
-                <button class="routine-option">
-                    <span>05</span>
-                    <div>
-                        <h3>HIIT Cardio Burn</h3>
-                        <p>Cardio · Endurance</p>
-                    </div>
-                    <span class="arrow">↗</span>
-                </button>
-
-                <button class="routine-option">
-                    <span>06</span>
-                    <div>
-                        <h3>Beginner Foundation</h3>
-                        <p>Full body · Beginners</p>
-                    </div>
-                    <span class="arrow">↗</span>
-                </button>
-            </div>
-
-            <div class="routine-preview">
-                <div class="preview-image">
-                    <span class="tag">FEATURED ROUTINE</span>
-                    <div class="preview-title">
-                        <p>01 / FULL BODY</p>
-                        <h3>FULL BODY<br>BLAST</h3>
-                    </div>
-                </div>
-
-                <div class="preview-details">
-                    <div>
-                        <span>FOCUS</span>
-                        <p>Strength & conditioning</p>
-                    </div>
-
-                    <div>
-                        <span>LEVEL</span>
-                        <p>Beginner to intermediate</p>
-                    </div>
-
-                    <div>
-                        <span>FORMAT</span>
-                        <p>Full body training</p>
-                    </div>
-                </div>
-
-                <a href="#routines" class="btn btn-orange full-width">
-                    Explore Routine ↗
-                </a>
-            </div>
-
-        </div>
+    <section class="quick-start">
+      <div class="section-intro">
+        <span class="eyebrow-pill">🔥 QUICK START</span>
+        <h2>CHOOSE YOUR <span>BASE ROUTINE</span></h2>
+        <p>Select a routine to explore its focus, duration, and exercises. You can add it to your plan with one tap.</p>
+      </div>
+      <div class="base-layout">
+        <div class="base-list" id="base-list" aria-label="Choose a base routine"></div>
+        <article class="base-detail" id="base-detail" aria-live="polite"></article>
+      </div>
     </section>
 
-    <!-- ROUTINE LIBRARY -->
-    <section class="routine-library" id="routines">
-        <div class="section-heading light-heading">
-            <p class="eyebrow">BUILT FOR YOUR GOALS</p>
-            <h2>Base & Custom <span>Routines</span></h2>
-            <p>Find your starting routine and make it your own.</p>
+    <section class="library" id="routines">
+      <div class="library-heading">
+        <div>
+          <span class="eyebrow-pill">💪 ROUTINES</span>
+          <h2>Base &amp; Custom <span>Routines</span></h2>
+          <p>Pick a base routine and edit it to fit your needs — or create your own from scratch.</p>
         </div>
-
-        <div class="filters">
-            <button class="filter active">All Routines</button>
-            <button class="filter">Strength</button>
-            <button class="filter">Cardio</button>
-            <button class="filter">Core</button>
-            <button class="filter">Beginner</button>
-        </div>
-
-        <div class="routine-cards">
-
-            <article class="routine-card">
-                <div class="card-image card-one">
-                    <span class="card-number">01</span>
-                    <span class="card-label">FULL BODY</span>
-                </div>
-                <div class="card-content">
-                    <p class="card-category">STRENGTH · CONDITIONING</p>
-                    <h3>Full Body Blast</h3>
-                    <p>A balanced routine to work on your overall strength and fitness.</p>
-                    <div class="card-footer">
-                        <span>All levels</span>
-                        <a href="#customize">Customize ↗</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="routine-card">
-                <div class="card-image card-two">
-                    <span class="card-number">02</span>
-                    <span class="card-label">UPPER BODY</span>
-                </div>
-                <div class="card-content">
-                    <p class="card-category">STRENGTH · UPPER BODY</p>
-                    <h3>Upper Body Power</h3>
-                    <p>Focus on upper-body strength with a structured training plan.</p>
-                    <div class="card-footer">
-                        <span>Intermediate</span>
-                        <a href="#customize">Customize ↗</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="routine-card">
-                <div class="card-image card-three">
-                    <span class="card-number">03</span>
-                    <span class="card-label">LOWER BODY</span>
-                </div>
-                <div class="card-content">
-                    <p class="card-category">STRENGTH · LEGS</p>
-                    <h3>Lower Body Strength</h3>
-                    <p>Build a balanced lower-body routine around your goals.</p>
-                    <div class="card-footer">
-                        <span>All levels</span>
-                        <a href="#customize">Customize ↗</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="routine-card">
-                <div class="card-image card-four">
-                    <span class="card-number">04</span>
-                    <span class="card-label">CORE</span>
-                </div>
-                <div class="card-content">
-                    <p class="card-category">CORE · STABILITY</p>
-                    <h3>Core Crusher</h3>
-                    <p>Practice core stability, balance, and controlled movement.</p>
-                    <div class="card-footer">
-                        <span>All levels</span>
-                        <a href="#customize">Customize ↗</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="routine-card">
-                <div class="card-image card-five">
-                    <span class="card-number">05</span>
-                    <span class="card-label">CARDIO</span>
-                </div>
-                <div class="card-content">
-                    <p class="card-category">CARDIO · ENDURANCE</p>
-                    <h3>HIIT Cardio Burn</h3>
-                    <p>A cardio-focused routine with adjustable work and rest periods.</p>
-                    <div class="card-footer">
-                        <span>Intermediate</span>
-                        <a href="#customize">Customize ↗</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="routine-card">
-                <div class="card-image card-six">
-                    <span class="card-number">06</span>
-                    <span class="card-label">BEGINNER</span>
-                </div>
-                <div class="card-content">
-                    <p class="card-category">FOUNDATION · FULL BODY</p>
-                    <h3>Beginner Foundation</h3>
-                    <p>Start with fundamental movements and build confidence gradually.</p>
-                    <div class="card-footer">
-                        <span>Beginners</span>
-                        <a href="#customize">Customize ↗</a>
-                    </div>
-                </div>
-            </article>
-
-        </div>
+        <button class="primary-btn new-routine" id="new-routine">＋ New Routine</button>
+      </div>
+      <div class="filters" id="filters" aria-label="Filter routines">
+        <button class="filter active" data-filter="All">All</button>
+        <button class="filter" data-filter="Full Body">Full Body</button>
+        <button class="filter" data-filter="Upper Body">Upper Body</button>
+        <button class="filter" data-filter="Lower Body">Lower Body</button>
+        <button class="filter" data-filter="Core">Core</button>
+        <button class="filter" data-filter="Cardio">Cardio</button>
+        <button class="filter" data-filter="Custom">Custom</button>
+      </div>
+      <div class="routine-grid" id="routine-grid"></div>
+      <p class="empty-state" id="empty-state" hidden>No routines in this category yet.</p>
     </section>
 
-    <!-- CUSTOMIZE YOUR TRAINING -->
-    <section class="customize-section section-dark" id="customize">
-        <div class="section-heading">
-            <p class="eyebrow">MAKE IT PERSONAL</p>
-            <h2>Customize Your <span>Training</span></h2>
-            <p>Tell us about your preferences to plan your training.</p>
-        </div>
-
-        <form class="custom-form">
-
-            <div class="form-grid">
-
-                <div class="form-group">
-                    <label for="health">Health status</label>
-                    <select id="health" name="health">
-                        <option value="">Select your status</option>
-                        <option>Generally healthy</option>
-                        <option>Returning to exercise</option>
-                        <option>Have physical limitations</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="level">Fitness level</label>
-                    <select id="level" name="level">
-                        <option value="">Select your level</option>
-                        <option>Beginner</option>
-                        <option>Intermediate</option>
-                        <option>Advanced</option>
-                    </select>
-                </div>
-
-                <div class="form-group full-column">
-                    <label for="budget">Monthly budget</label>
-                    <div class="budget-row">
-                        <span>Budget</span>
-                        <output id="budget-value">$50</output>
-                    </div>
-                    <input type="range" id="budget" name="budget"
-                           min="10" max="200" value="50" step="5">
-                    <div class="range-labels">
-                        <span>$10</span>
-                        <span>$200</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="schedule">Preferred time</label>
-                    <select id="schedule" name="schedule">
-                        <option value="">Choose a time</option>
-                        <option>Morning</option>
-                        <option>Afternoon</option>
-                        <option>Evening</option>
-                        <option>Flexible</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="days">Training frequency</label>
-                    <select id="days" name="days">
-                        <option value="">Choose frequency</option>
-                        <option>1–2 days per week</option>
-                        <option>3 days per week</option>
-                        <option>4 days per week</option>
-                        <option>5 or more days per week</option>
-                    </select>
-                </div>
-
-                <div class="form-group full-column">
-                    <label>Training goals</label>
-                    <div class="goal-options">
-                        <label class="goal-option">
-                            <input type="checkbox" name="goals" value="Strength">
-                            <span>Strength</span>
-                        </label>
-
-                        <label class="goal-option">
-                            <input type="checkbox" name="goals" value="Endurance">
-                            <span>Endurance</span>
-                        </label>
-
-                        <label class="goal-option">
-                            <input type="checkbox" name="goals" value="Flexibility">
-                            <span>Flexibility</span>
-                        </label>
-
-                        <label class="goal-option">
-                            <input type="checkbox" name="goals" value="General fitness">
-                            <span>General fitness</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group full-column">
-                    <label for="notes">Additional notes</label>
-                    <textarea id="notes" name="notes" rows="4"
-                              placeholder="Tell us about your preferences or goals..."></textarea>
-                </div>
-
+    <section class="customize" id="customize">
+      <div class="section-intro">
+        <span class="eyebrow-pill">🎯 PERSONAL PLAN</span>
+        <h2>CUSTOMIZE YOUR <span>TRAINING</span></h2>
+        <p>Choose the preferences that help you build a balanced plan at your own pace.</p>
+      </div>
+      <form id="plan-form" class="plan-form">
+        <section class="form-panel">
+          <h3><span class="panel-icon">🧍</span> About You</h3>
+          <div class="field-grid">
+            <label class="field">Age range
+              <select name="age" required><option value="">Select age range</option><option>Under 18</option><option>18–24</option><option>25–34</option><option>35–44</option><option>45+</option></select>
+            </label>
+            <label class="field">Fitness level
+              <select name="level" required><option value="">Select level</option><option>Sedentary</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Athlete</option></select>
+            </label>
+          </div>
+        </section>
+        <section class="form-panel">
+          <h3><span class="panel-icon">💰</span> Budget &amp; Economy</h3>
+          <div class="budget-line"><label for="budget">Monthly Budget</label><output id="budget-output">$50</output></div>
+          <input id="budget" name="budget" type="range" min="0" max="500" value="50" step="5">
+          <div class="range-labels"><span>$0</span><span>$250</span><span>$500</span></div>
+        </section>
+        <section class="form-panel">
+          <h3><span class="panel-icon">⏱️</span> Schedule &amp; Availability</h3>
+          <div class="choice-group">
+            <span class="field-caption">Time of Day</span>
+            <div class="choice-row" data-choice-group="time">
+              <button type="button" class="choice" data-value="Morning">🌅<small>Morning</small></button>
+              <button type="button" class="choice" data-value="Afternoon">☀️<small>Afternoon</small></button>
+              <button type="button" class="choice" data-value="Evening">🌙<small>Evening</small></button>
             </div>
-
-            <button type="button" class="btn btn-orange save-button">
-                Save My Preferences ↗
-            </button>
-
-            <p class="form-note">
-                Your information helps you organize your training preferences.
-            </p>
-
-        </form>
+          </div>
+          <div class="choice-group days-group">
+            <span class="field-caption">Preferred Days</span>
+            <div class="day-row" data-choice-group="days">
+              <button type="button" class="day" data-value="Mon">Mon</button><button type="button" class="day" data-value="Tue">Tue</button><button type="button" class="day" data-value="Wed">Wed</button><button type="button" class="day" data-value="Thu">Thu</button><button type="button" class="day" data-value="Fri">Fri</button><button type="button" class="day" data-value="Sat">Sat</button><button type="button" class="day" data-value="Sun">Sun</button>
+            </div>
+          </div>
+        </section>
+        <section class="form-panel goals-panel">
+          <h3><span class="panel-icon">📝</span> Goals &amp; Notes</h3>
+          <label class="field">Your Goals<textarea name="goals" rows="2" placeholder="e.g. Improve endurance, build strength, feel more active..."></textarea></label>
+          <label class="field">Additional Notes<textarea name="notes" rows="2" placeholder="Any preferences, limitations, or things you'd like us to know..."></textarea></label>
+        </section>
+        <button class="primary-btn save-plan" type="submit">💾 Save My Plan</button>
+        <p class="form-message" id="form-message" role="status"></p>
+        <p class="privacy-note">Your preferences are saved in this browser on this device.</p>
+      </form>
     </section>
+  </main>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <a href="Indexm.html" class="logo">PRIME<span>.</span></a>
-        <p>BUILD YOUR BEST. LIVE YOUR PRIME.</p>
-        <a href="Indexm.html">Back to Home ↑</a>
-        <p class="copyright">© 2026 PRIME. All rights reserved.</p>
-    </footer>
+  <footer class="footer">
+    <a class="brand" href="Indexm.html">PRIME<span>.</span></a>
+    <p>BUILD YOUR BEST. LIVE YOUR PRIME.</p>
+    <a href="Indexm.html">Back to Home ↑</a>
+    <small>© 2026 PRIME. All rights reserved.</small>
+  </footer>
 
-    <!-- SIMPLE BUDGET DISPLAY -->
-    <script>
-        const budgetSlider = document.getElementById("budget");
-        const budgetValue = document.getElementById("budget-value");
-
-        budgetSlider.addEventListener("input", function () {
-            budgetValue.textContent = "$" + this.value;
-        });
-    </script>
-
+  <dialog class="routine-dialog" id="routine-dialog">
+    <form id="routine-editor" method="dialog">
+      <div class="dialog-head"><h2 id="dialog-title">NEW ROUTINE</h2><button class="close-dialog" type="button" id="close-dialog" aria-label="Close">×</button></div>
+      <div class="dialog-body">
+        <label class="field">Routine Name<input name="name" required maxlength="48" placeholder="e.g. Morning Power Workout"></label>
+        <label class="field">Description<textarea name="description" rows="2" maxlength="180" placeholder="Describe the focus of this routine"></textarea></label>
+        <div class="field-grid">
+          <label class="field">Difficulty<select name="difficulty"><option>Beginner</option><option selected>Intermediate</option><option>Advanced</option></select></label>
+          <label class="field">Category<select name="category"><option>Full Body</option><option>Upper Body</option><option>Lower Body</option><option>Core</option><option>Cardio</option></select></label>
+        </div>
+        <label class="field">Duration (minutes)<input name="duration" type="number" min="5" max="240" value="30" required></label>
+        <div class="exercise-head"><strong>Exercises</strong><button type="button" class="add-exercise" id="add-exercise">＋ Add</button></div>
+        <div id="exercise-editor" class="exercise-editor"></div>
+        <p class="dialog-error" id="dialog-error" role="alert"></p>
+      </div>
+      <div class="dialog-actions"><button class="primary-btn" id="submit-routine" type="submit">Create Routine</button><button class="cancel-btn" type="button" id="cancel-dialog">Cancel</button></div>
+    </form>
+  </dialog>
+  <script src="routines.js" defer></script>
 </body>
 </html>
