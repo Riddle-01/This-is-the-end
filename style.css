@@ -192,3 +192,7 @@ footer.light .cp{border-top-color:#e5e5e5;color:#888}
 
 /* Consistent official PRIME white logo lockup */
 .prime-lockup{display:inline-flex;align-items:center;gap:10px;color:#fff!important;text-decoration:none;white-space:nowrap}.prime-lockup img{display:block;width:36px;height:38px;object-fit:contain;flex:0 0 auto}.prime-lockup span{color:#fff!important;font:900 28px/1 Inter,Arial,sans-serif;letter-spacing:-1px}footer .prime-lockup{margin-bottom:8px}footer .prime-lockup span{color:#fff!important}
+
+
+/* Unified PRIME official logo: identical icon, white lettering, size and spacing in header and footer */
+.prime-lockup,.lg.prime-lockup{display:inline-flex;align-items:center;justify-content:flex-start;gap:10px;color:#fff!important;text-decoration:none;white-space:nowrap}.prime-lockup img{display:block;width:36px;height:38px;object-fit:contain;flex:0 0 36px}.prime-lockup span{display:inline-flex;align-items:baseline;color:#fff!important;font:900 28px/1 Inter,Arial,sans-serif!important;letter-spacing:-1px!important}footer .prime-lockup{margin-bottom:8px}footer .prime-lockup span{color:#fff!important}
