@@ -1127,6 +1127,16 @@ if (readMoreButton) {
     if (form.dataset.primeContactReady === "true") return;
     form.dataset.primeContactReady = "true";
 
+    // Hidden anti-spam field. Real visitors never need to fill this in.
+    const trap = document.createElement("input");
+    trap.type = "text";
+    trap.name = "website";
+    trap.autocomplete = "off";
+    trap.tabIndex = -1;
+    trap.setAttribute("aria-hidden", "true");
+    trap.style.cssText = "position:absolute;left:-10000px;width:1px;height:1px;opacity:0";
+    form.appendChild(trap);
+
     const status = (text, ok) => {
       feedback.textContent = text;
       feedback.style.color = ok ? "#35c987" : "#ff6b4a";
@@ -1140,11 +1150,7 @@ if (readMoreButton) {
       const email = emailInput.value.trim();
       const message = messageInput.value.trim();
 
-      if (!name || !email || !message) {
-        status("Please complete all fields.", false);
-        return;
-      }
-      if (name.length < 2 || message.length < 5 || !emailInput.checkValidity()) {
+      if (!name || !email || !message || name.length < 2 || message.length < 5 || !emailInput.checkValidity()) {
         status("Please enter a valid name, email and message.", false);
         return;
       }
@@ -1153,41 +1159,33 @@ if (readMoreButton) {
       button.textContent = "SENDING...";
       status("Sending your message...", true);
 
-      let timeoutId;
       try {
-        if (!window.supabase || !window.supabase.createClient) {
-          throw new Error("Supabase library did not load. Refresh the page and try again.");
-        }
-
-        const timedFetch = (url, options = {}) => {
-          const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 12000);
-          return fetch(url, { ...options, signal: controller.signal })
-            .finally(() => clearTimeout(timer));
-        };
-
-        const client = window.supabase.createClient(
-          "https://lykigrvkzkvwpeqgmxjq.supabase.co",
-          "sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8",
-          { global: { fetch: timedFetch } }
-        );
-
-        const result = await client.from("contact_messages").insert({
-          name: name,
-          email: email,
-          message: message
+        const response = await fetch("https://lykigrvkzkvwpeqgmxjq.supabase.co/functions/v1/prime-contact-email", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": "sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8"
+          },
+          body: JSON.stringify({ name, email, message, website: trap.value })
         });
 
-        if (result.error) throw result.error;
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          if (result.saved) {
+            form.reset();
+            status("Your message was saved, but email delivery is not ready yet. Please try again later.", false);
+          } else {
+            throw new Error(result.error || "The message could not be sent.");
+          }
+          return;
+        }
 
         form.reset();
-        status("Your message was sent successfully. Thank you!", true);
+        status("Message sent successfully! We will contact you soon.", true);
       } catch (error) {
         console.error("PRIME contact form:", error);
-        const detail = error && error.name === "AbortError"
-          ? "The connection timed out. Please check your internet and try again."
-          : (error && error.message ? error.message : "Unknown connection error.");
-        status("Could not send: " + detail, false);
+        status(error.message || "Could not send your message. Please try again.", false);
       } finally {
         button.disabled = false;
         button.textContent = "SEND MESSAGE";
