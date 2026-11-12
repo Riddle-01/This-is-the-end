@@ -356,7 +356,11 @@ supabaseClient.auth.onAuthStateChange((event,session)=>{
     showAccountStatus("You are signed out. Sign in to sync your routines.",true);
   } else if (event==="SIGNED_IN" && session?.user) {
     currentUser=session.user;
-    loadUserData().catch(error=>{console.error(error);showAccountStatus("Could not load account data: "+error.message);});
+    /* Run after the auth callback releases its internal lock. */
+    Promise.resolve().then(()=>loadUserData()).catch(error=>{
+      console.error(error);
+      showAccountStatus("Could not load account data: "+error.message);
+    });
   }
 });
 loadUserData().catch(error=>{
