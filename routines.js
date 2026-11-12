@@ -170,6 +170,62 @@ function openEditor(r=null) {
   $("#dialog-error").textContent = "";
   $("#routine-dialog").showModal();
 }
+
+async function migrateLegacyLocalData() {
+  /* Bring forward routines/preferences created by the previous localStorage version. */
+  let alreadyMigrated = false;
+  try { alreadyMigrated = localStorage.getItem("primeSupabaseMigrationDone") === "yes"; } catch {}
+  if (alreadyMigrated) return;
+
+  let oldRoutines = [], oldPlan = null, oldSelected = [];
+  try { oldRoutines = JSON.parse(localStorage.getItem("primeCustomRoutines") || "[]"); } catch {}
+  try { oldPlan = JSON.parse(localStorage.getItem("primeTrainingPlan") || "null"); } catch {}
+  try { oldSelected = JSON.parse(localStorage.getItem("primeSelectedRoutines") || "[]"); } catch {}
+  if (!Array.isArray(oldRoutines)) oldRoutines = [];
+  if (!Array.isArray(oldSelected)) oldSelected = [];
+
+  const idMap = new Map();
+  if (oldRoutines.length) {
+    const payload = oldRoutines.map(item => ({
+      user_id:currentUser.id,
+      name:String(item.name || "My routine").slice(0,48),
+      description:String(item.description || "").slice(0,180),
+      category:["Full Body","Upper Body","Lower Body","Core","Cardio"].includes(item.category) ? item.category : "Full Body",
+      difficulty:["Beginner","Intermediate","Advanced"].includes(item.difficulty) ? item.difficulty : "Beginner",
+      duration:Math.min(240,Math.max(5,Number(item.duration)||30)),
+      emoji:"💪",
+      exercises:Array.isArray(item.exercises) ? item.exercises : []
+    }));
+    const {data,error}=await supabaseClient.from("user_routines").insert(payload).select("*");
+    if (error) throw error;
+    data.forEach((row,index)=>idMap.set(String(oldRoutines[index]?.id),row.id));
+  }
+
+  const mappedSelections = oldSelected.map(id=>idMap.get(String(id)) || String(id));
+  if (oldPlan || mappedSelections.length) {
+    const {data:existing,error:readError}=await supabaseClient
+      .from("training_preferences").select("*").eq("user_id",currentUser.id).maybeSingle();
+    if (readError) throw readError;
+    if (!existing) {
+      const legacy = oldPlan || {};
+      const selected = [...new Set(mappedSelections)];
+      const {error}=await supabaseClient.from("training_preferences").upsert({
+        user_id:currentUser.id,
+        age_range:legacy.age || "",
+        fitness_level:legacy.level || "",
+        monthly_budget:Math.min(500,Math.max(0,Number(legacy.budget)||50)),
+        preferred_time:legacy.time || "",
+        preferred_days:Array.isArray(legacy.days) ? legacy.days : [],
+        goals:legacy.goals || "",
+        notes:legacy.notes || "",
+        selected_routine_ids:selected
+      },{onConflict:"user_id"});
+      if (error) throw error;
+    }
+  }
+  try { localStorage.setItem("primeSupabaseMigrationDone","yes"); } catch {}
+}
+
 async function loadUserData() {
   const {data,error} = await supabaseClient.auth.getUser();
   if (error) throw error;
@@ -180,6 +236,7 @@ async function loadUserData() {
     return;
   }
   showAccountStatus("Signed in as " + (currentUser.email || "your PRIME account") + " · Your data syncs with your account.");
+  await migrateLegacyLocalData();
   const [routineResult, preferenceResult] = await Promise.all([
     supabaseClient.from("user_routines").select("*").order("created_at",{ascending:true}),
     supabaseClient.from("training_preferences").select("*").eq("user_id",currentUser.id).maybeSingle()
