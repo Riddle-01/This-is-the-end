@@ -189,3 +189,6 @@ footer.light .cp{border-top-color:#e5e5e5;color:#888}
 .prime-toast{position:fixed;top:96px;left:50%;transform:translate(-50%,-20px);z-index:400;display:flex;align-items:center;gap:8px;max-width:90vw;background:#111;color:#fff;border:1px solid var(--o);border-radius:16px;padding:14px 22px;font:600 14px Poppins,Inter,sans-serif;box-shadow:0 12px 40px rgba(255,90,0,.3);opacity:0;transition:opacity .35s,transform .35s}
 .prime-toast.show{opacity:1;transform:translate(-50%,0)}
 .prime-toast b{color:var(--o)}
+
+/* Consistent official PRIME white logo lockup */
+.prime-lockup{display:inline-flex;align-items:center;gap:10px;color:#fff!important;text-decoration:none;white-space:nowrap}.prime-lockup img{display:block;width:36px;height:38px;object-fit:contain;flex:0 0 auto}.prime-lockup span{color:#fff!important;font:900 28px/1 Inter,Arial,sans-serif;letter-spacing:-1px}footer .prime-lockup{margin-bottom:8px}footer .prime-lockup span{color:#fff!important}
