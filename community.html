@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080909">
+  <title>PRIME | Community</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community.css">
+</head>
+<body>
+<header class="header">
+  <a class="brand" href="Indexm.html">PRIME<span>.</span></a>
+  <nav><a href="Indexm.html">Home</a><a href="courts.html">Courts</a><a class="active" href="community.html">Community</a><a href="blog.html">Blog</a><a href="#contact">Contact</a></nav>
+  <a class="signin" href="signin.html">Sign in ↗</a>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">— PRIME COMMUNITY</p>
+      <h1>FIND YOUR<br><span>SPORTS TRIBE.</span></h1>
+      <p class="hero-copy">Clubs, athletes, teams and contacts in one place. Connect with people who train like you in La Chorrera, Panama Oeste.</p>
+      <div class="hero-actions"><a class="btn" href="#teams">EXPLORE CLUBS</a><a class="btn outline" href="#athletes">VIEW ATHLETES</a></div>
+      <div class="stats"><div><strong>+500</strong><small>ACTIVE USERS</small></div><div><strong>+12</strong><small>TEAMS</small></div><div><strong>+50</strong><small>ATHLETES</small></div><div><strong>+20</strong><small>COURTS</small></div></div>
+    </div>
+  </section>
+
+  <section class="teams-section" id="teams">
+    <div class="section-wrap">
+      <p class="eyebrow orange">— TEAMS · LA CHORRERA</p>
+      <h2>JOIN A TEAM<br>NEAR YOU.</h2>
+      <p class="section-copy">Courts, pitches and sports spaces across La Chorrera, Panama Oeste.<br>Filter by sport and find your spot.</p>
+      <div class="filters" id="team-filters">
+        <button class="filter active" data-sport="All">ALL SPORTS</button>
+        <button class="filter" data-sport="5-a-side Football">5-A-SIDE FOOTBALL</button>
+        <button class="filter" data-sport="Padel">PADEL</button>
+        <button class="filter" data-sport="Basketball">BASKETBALL</button>
+        <button class="filter" data-sport="Volleyball">VOLLEYBALL</button>
+        <button class="filter" data-sport="Tennis">TENNIS</button>
+        <button class="filter" data-sport="Athletics">ATHLETICS</button>
+      </div>
+      <div class="team-grid" id="team-grid"></div>
+      <p class="empty" id="team-empty" hidden>No teams found in this category yet.</p>
+    </div>
+  </section>
+
+  <section class="athletes-section" id="athletes">
+    <div class="section-wrap">
+      <p class="eyebrow orange">— ATHLETES</p>
+      <h2>MEET THE PEOPLE<br>WHO LIVE THE <span>GAME.</span></h2>
+      <p class="section-copy">Verified players and coaches with real stats. Connect, learn and<br>level up with the best in Panama.</p>
+      <div class="athlete-grid" id="athlete-grid"></div>
+    </div>
+  </section>
+
+  <section class="contact-section" id="contact">
+    <div class="contact-wrap">
+      <div class="contact-form-wrap">
+        <p class="eyebrow orange">— CONTACT</p>
+        <h2>LET'S TALK?</h2>
+        <form id="contact-form">
+          <label>NAME<input name="name" maxlength="100" placeholder="Your full name" required></label>
+          <label>EMAIL<input name="email" type="email" maxlength="160" placeholder="youremail@example.com" required></label>
+          <label>MESSAGE<textarea name="message" rows="4" maxlength="1500" placeholder="Tell us how we can help" required></textarea></label>
+          <button class="btn send-btn" type="submit">SEND MESSAGE</button>
+          <p class="form-status" id="contact-status" role="status"></p>
+          <div class="contact-pills"><span>✉ hello@prime.app</span><span>☎ +507 6000-0000</span></div>
+        </form>
+      </div>
+      <div class="faq">
+        <h3>Frequently asked questions</h3>
+        <details open><summary>How do I join a club or team?</summary><p>Browse the teams section, pick the one you like and hit “Join”. The organizer will receive your request.</p></details>
+        <details><summary>Are athletes verified?</summary><p>Profiles shown in this community demo are examples. PRIME will identify verified profiles when verification is enabled.</p></details>
+        <details><summary>Can I create my own team?</summary><p>Yes. Contact the PRIME team and tell us the sport, location and details of your group.</p></details>
+        <details><summary>Is there a cost to join the community?</summary><p>Community access is free. Individual teams may have their own fees, shown on each team card.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><a class="brand" href="Indexm.html">PRIME<span>.</span></a><p>BUILD YOUR BEST. LIVE YOUR PRIME.</p><a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a><small>© 2026 PRIME. All rights reserved.</small></footer>
+
+<dialog class="join-dialog" id="join-dialog">
+  <div class="join-layout">
+    <div class="join-preview"><span class="sport-tag" id="join-sport">PADEL</span><h3 id="join-team-name">BARRIO COLÓN</h3><p id="join-team-location">📍 Colón Padel Team</p><div class="preview-meta" id="join-team-meta">★ 4.8 · 22 members</div></div>
+    <form id="join-form" class="join-form">
+      <button class="dialog-close" type="button" id="join-close" aria-label="Close">×</button>
+      <p class="eyebrow orange">REGISTRATION</p>
+      <p class="join-description" id="join-description"></p>
+      <div class="tags" id="join-tags"></div>
+      <label>FULL NAME<input name="name" required maxlength="100" placeholder="Your full name"></label>
+      <label>EMAIL<input name="email" type="email" required maxlength="160" placeholder="you@email.com"></label>
+      <label>PHONE<input name="phone" type="tel" maxlength="35" placeholder="+507 6000 0000"></label>
+      <p class="form-status" id="join-status" role="status"></p>
+      <button class="btn claim-btn" type="submit">CLAIM YOUR SPOT</button>
+    </form>
+  </div>
+</dialog>
+
+<dialog class="profile-dialog" id="profile-dialog">
+  <div class="profile-content"><button class="profile-close" id="profile-close" aria-label="Close">×</button><div class="profile-top"><span class="avatar large" id="profile-avatar">DF</span><div><span class="sport-tag" id="profile-role">ADVANCED</span><h2 id="profile-name">Diego Fábrega</h2><p id="profile-summary"></p></div></div><div class="profile-ratings" id="profile-ratings"></div><h3 class="mini-heading">SPECIALTIES</h3><div class="tags" id="profile-specialties"></div><h3 class="mini-heading">CAREER STATS</h3><div class="career-stats" id="profile-stats"></div><button class="btn secure-btn" id="profile-done">CLOSE PROFILE</button></div>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="community.js" defer></script>
+</body>
+</html>
