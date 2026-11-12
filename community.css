@@ -28,3 +28,4 @@
 .profile-content .profile-btn{margin-top:8px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:760px){.team-grid{max-width:620px}.athlete-grid{max-width:620px}}
+.coach-photo{width:104px;height:104px;object-fit:cover;border-radius:50%;border:2px solid #f04412;box-shadow:0 0 28px #f0441230}.athlete-visual .coach-photo{position:relative}.athlete-visual .sport-tag{z-index:1}
