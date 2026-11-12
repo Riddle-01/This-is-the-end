@@ -2,7 +2,7 @@
   "use strict";
 
   const SUPABASE_URL = "https://lykigrvkzkvwpeqgmxjq.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_87iX3KMcXjiZU3VV8Xq7rYw_N7CTjSk8";
+  const SUPABASE_KEY = "sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8";
   const list = document.getElementById("court-list");
   const count = document.getElementById("court-count");
   const search = document.getElementById("court-search");
