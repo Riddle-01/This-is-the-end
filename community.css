@@ -35,3 +35,7 @@
 
 /* Consistent official PRIME white logo lockup */
 .brand{display:inline-flex;align-items:center;gap:9px;color:#fff!important;white-space:nowrap}.brand>img{display:block;width:30px;height:32px;object-fit:contain;flex:0 0 auto}.brand-word{color:#fff!important;font-size:inherit;font-weight:900;letter-spacing:-1.5px}.brand-word span{color:#fff!important}.footer .brand{display:inline-flex;align-items:center;justify-content:center;color:#fff!important}.footer .brand-word{color:#fff!important}
+
+
+/* Unified PRIME official logo: identical icon, white lettering, size and spacing in header and footer */
+.brand,.footer .brand{display:inline-flex;align-items:center;justify-content:flex-start;gap:10px;color:#fff!important;text-decoration:none;white-space:nowrap}.brand>img,.footer .brand>img{display:block;width:36px;height:38px;object-fit:contain;flex:0 0 36px}.brand-word,.footer .brand-word{display:inline-flex;align-items:baseline;color:#fff!important;font:900 28px/1 Inter,Arial,sans-serif!important;letter-spacing:-1px!important}.brand-word span,.footer .brand-word span{color:#fff!important}
