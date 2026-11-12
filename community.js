@@ -79,17 +79,37 @@ $("#contact-form").addEventListener("submit",async e=>{
  catch(err){console.error(err);$("#contact-status").textContent="We couldn't send your message. Please try again in a moment.";button.disabled=false;button.textContent="SEND MESSAGE";}
 });
 async function initCommunity(){
+ // Public community data must load even when the visitor is not signed in.
  try{
-  const {data:authData,error:authError}=await supabaseClient.auth.getUser();if(authError)throw authError;currentUser=authData.user||null;
-  const [teamResult,coachResult,reviewResult]=await Promise.all([
-   supabaseClient.from("community_teams").select("*").eq("is_active",true).order("name"),
-   supabaseClient.from("community_coaches").select("*").eq("is_active",true).order("full_name"),
-   supabaseClient.from("community_coach_reviews").select("id,coach_id,user_id,overall_rating,review_text,created_at").order("created_at",{ascending:false})
-  ]);
-  if(teamResult.error)throw teamResult.error;if(coachResult.error)throw coachResult.error;
-  teams=teamResult.data||[];coaches=coachResult.data||[];reviews=reviewResult.error?[]:(reviewResult.data||[]);
-  renderTeams();renderAthletes();
-  if(currentUser?.email)$("#join-form").elements.email.value=currentUser.email;
- }catch(err){console.error("PRIME Community loading error:",err);$("#team-empty").hidden=false;$("#team-empty").textContent="Community data couldn't load. Please refresh the page or sign in again.";}
+  const {data:sessionData}=await supabaseClient.auth.getSession();
+  currentUser=sessionData?.session?.user||null;
+ }catch(authErr){
+  console.warn("PRIME Community: session unavailable; continuing as visitor.",authErr);
+  currentUser=null;
+ }
+ const [teamResult,coachResult,reviewResult]=await Promise.all([
+  supabaseClient.from("community_teams").select("*").eq("is_active",true).order("name"),
+  supabaseClient.from("community_coaches").select("*").eq("is_active",true).order("full_name"),
+  supabaseClient.from("community_coach_reviews").select("id,coach_id,user_id,overall_rating,review_text,created_at").order("created_at",{ascending:false})
+ ]);
+ if(teamResult.error||coachResult.error){
+  const err=teamResult.error||coachResult.error;
+  console.error("PRIME Community data error:",{teams:teamResult.error,coaches:coachResult.error});
+  $("#team-empty").hidden=false;
+  $("#team-empty").textContent="Couldn't load community data: "+(err.message||"Please try again.");
+  return;
+ }
+ teams=teamResult.data||[];
+ coaches=coachResult.data||[];
+ reviews=reviewResult.error?[]:(reviewResult.data||[]);
+ renderTeams();
+ renderAthletes();
+ if(currentUser?.email)$("#join-form").elements.email.value=currentUser.email;
 }
-renderTeams();renderAthletes();initCommunity();
+renderTeams();
+renderAthletes();
+initCommunity().catch(err=>{
+ console.error("PRIME Community initialization error:",err);
+ $("#team-empty").hidden=false;
+ $("#team-empty").textContent="Community couldn't load. Please refresh and try again.";
+});
