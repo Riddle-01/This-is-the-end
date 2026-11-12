@@ -70,8 +70,11 @@
     }).addTo(map);
   }
 
-  function googleMapsLink(place) {
-    return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(place.query || (place.name+" "+place.location+" La Chorrera Panamá"));
+  function directionsLink(place) {
+    const destination = (typeof place.lat === "number" && typeof place.lng === "number")
+      ? place.lat+","+place.lng
+      : (place.query || (place.name+" "+place.location+" La Chorrera Panamá"));
+    return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(destination)+"&travelmode=driving";
   }
 
   function addExternalMarkers() {
@@ -81,8 +84,11 @@
       const key = sportKey(place.sport);
       const marker = L.marker([place.lat,place.lng],{icon:markerIcon(key,false)}).addTo(map);
       const contact = place.phone ? '<br><span>'+escapeHTML(place.phone)+'</span>' : "";
-      const link = '<br><a href="'+googleMapsLink(place)+'" target="_blank" rel="noopener">Open directions ↗</a>';
+      const link = '<br><a href="'+directionsLink(place)+'" target="_blank" rel="noopener">Get directions ↗</a>';
       marker.bindPopup('<strong>'+escapeHTML(place.name)+'</strong><br>'+escapeHTML(place.detail)+contact+link);
+      marker.on("click", () => {
+        map.flyTo(marker.getLatLng(),17,{animate:true,duration:1.2});
+      });
       markers.set(place.id,marker);
     });
   }
@@ -116,7 +122,7 @@
       const status = isPrime ? "PRIME · BOOK ON SITE" : (item.booking ? "EXTERNAL · RENTAL / BOOKING" : "PUBLIC / COMMUNITY");
       const detail = isPrime ? (item.location || "Location not specified") : item.location;
       const price = isPrime ? '<span class="price">$ '+Number(item.hourly_rate||0).toFixed(2).replace(/\.00$/,"")+' <small>/ hour</small></span>' : '<span class="price">'+(item.phone ? escapeHTML(item.phone) : "See details")+'</span>';
-      const action = isPrime ? "VIEW AREA ↗" : '<a class="view-link" href="'+googleMapsLink(item)+'" target="_blank" rel="noopener">MAP / DETAILS ↗</a>';
+      const action = isPrime ? "VIEW AREA ↗" : '<a class="view-link" href="'+directionsLink(item)+'" target="_blank" rel="noopener">GET DIRECTIONS ↗</a>';
       return '<article class="court-card" tabindex="0" role="button" data-id="'+escapeHTML(item.id)+'" data-kind="'+item.kind+'">'+
         '<div class="court-thumb"'+image+'>'+thumb+'</div><div class="court-info">'+
         '<div class="court-type" style="color:'+color+'"><i class="type-dot" style="background:'+color+'"></i>'+escapeHTML(item.sport||"Sport")+'</div>'+
@@ -129,7 +135,7 @@
         list.querySelectorAll(".court-card").forEach(item => item.classList.remove("selected"));
         card.classList.add("selected");
         const marker = markers.get(card.dataset.id);
-        if (marker && map) { map.setView(marker.getLatLng(),16,{animate:true}); marker.openPopup(); }
+        if (marker && map) { map.flyTo(marker.getLatLng(),17,{animate:true,duration:1.2}); marker.openPopup(); }
         else if (card.dataset.kind === "prime" && map) {
           map.setView([8.8803,-79.7833],14,{animate:true});
         }
