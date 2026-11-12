@@ -1,6 +1,6 @@
 /* PRIME Community — Supabase-backed community page */
 const SUPABASE_URL="https://lykigrvkzkvwpeqgmxjq.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY="sb_publishable_87iX3KMcXjiZU3VX8q7rYw_N7CTjSk8";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_87iX3KMcXjiZU3V8Xq7rYw_N7CTjSk8";
 const primeAuthStorage={
  getItem(key){try{return localStorage.getItem(key)??sessionStorage.getItem(key)}catch{return sessionStorage.getItem(key)}},
  setItem(key,value){try{if(localStorage.getItem(key)!==null)localStorage.setItem(key,value);else sessionStorage.setItem(key,value)}catch{sessionStorage.setItem(key,value)}},
