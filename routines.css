@@ -14,3 +14,6 @@
 .card-delete:hover{background:#b9341b;border-color:#b9341b;color:#fff}
 .card-edit:disabled,.card-delete:disabled,.primary-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
 #account-status{max-width:570px;margin:0 auto 18px;color:#ff9a7e;font-size:11px;line-height:1.6}
+
+/* PRIME logo lockup */
+.brand{display:inline-flex;align-items:center;gap:9px;white-space:nowrap}.brand>img{display:block;width:30px;height:32px;object-fit:contain;flex:0 0 auto}.brand-word{display:inline-flex;align-items:baseline}.brand-word>span{color:var(--orange)}
